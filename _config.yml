@@ -154,11 +154,11 @@ yat:
 #   - about.md
 
 # Page default value
- defaults:
-   home:
-     heading: "위지원의 블로그"
-     subheading: "공부하고 삽질하며 개발한 내용을 기록합니다."
-     banner: "Your image url"
+# defaults:
+#   home:
+#     heading: "위지원의 블로그"
+#     subheading: "공부하고 삽질하며 개발한 내용을 기록합니다."
+#     banner: "Your image url"
 
 # Banner default settings
 # These banner settings are for global banner default, but you can also
