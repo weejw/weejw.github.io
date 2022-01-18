@@ -24,7 +24,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: WEEJW BLOG
+title: Weejiwon's Blog
 email: upsidejiwon@gmail.com
 author: weejw
 
@@ -157,7 +157,7 @@ yat:
 defaults:
   home:
     heading: "위지원의 블로그"
-    subheading: "공부하고 삽질하며 개발한 내용을 기록합니다."
+    subheading: "공부와 개발하며 경험한 내용들을 기록합니다."
     banner: "Your image url"
 
 # Banner default settings
