@@ -31,3 +31,15 @@ jobs:
           jekyll_baseurl: '/jekyll-theme-yat'  # Default is empty
           cname: ''                  # Default is to not use a cname
           actor: ''                  # Default is the GITHUB_ACTOR
+
+      -name: action-slack
+        uses: 8398a7/action-slack@v3 # https://github.com/8398a7/action-slack
+        with:
+          status: ${{ job.status }} 
+          author_name: weejw
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          mention: here
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
