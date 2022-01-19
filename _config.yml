@@ -154,10 +154,10 @@ yat:
 #   - about.md
 
 # Page default value
-# defaults:
-#   home:
-#     heading: "Your awesome heading"
-#     subheading: "Your awesome subheading"
+defaults:
+  home:
+    heading: "위지원의 블로그"
+    subheading: "개발 공부 성장"
 #     banner: "Your image url"
 
 # Banner default settings
