@@ -19,6 +19,23 @@ tags: leetcode algorithm 알고리즘 BinarySearch
 sidebar: []
 ---
 
-```원하는 확장자 (ex. py, java, md 등)
-원하는 프로그래밍 코드 내용
+# Binary Search
+https://leetcode.com/problems/binary-search/
+
+<u>EASY</u>
+
+Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.
+You must write an algorithm with O(log n) runtime complexity.
+
+
+python dictionary는 탐색 속도가 log n이므로 이를 이용해서 풀이.
+
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        nums = {num:i for i, num in enumerate(nums)}
+        if target in nums:
+            return nums[target]
+        return -1
+    
 ```
