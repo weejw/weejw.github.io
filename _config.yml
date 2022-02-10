@@ -24,11 +24,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-<<<<<<< HEAD
-title: Weejiwon's Blog
-=======
+
 title: 위지원의 블로그 😎
->>>>>>> 15718586fd60ee085188bc9ee92fd0fbe047686e
 email: upsidejiwon@gmail.com
 author: weejw
 
