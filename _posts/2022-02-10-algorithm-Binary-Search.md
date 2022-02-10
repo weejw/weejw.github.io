@@ -1,23 +1,13 @@
 ---
 layout: post
-title: Leet Code: Binary Search
+title: Leet Code - Binary Search
 subtitle: 코딩테스트 공부
 author: weejw
 categories: algorithm
-banner:
-  loop: true
-  volume: 0.8
-  start_at: 8.5
-  image: https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png
-  opacity: 0.618
-  background: "#000"
-  height: "100vh"
-  min_height: "38vh"
-  heading_style: "font-size: 4.25em; font-weight: bold; text-decoration: underline"
-  subheading_style: "color: gold"
-tags: leetcode algorithm 알고리즘 BinarySearch
-sidebar: []
+
+tags: [Algorithm, 알고리즘, leetcode, binary search, 이진검색]
 ---
+
 요즘 코테를 그냥 아예 등지고 살아서 기초부터 다시해야한다.. 뇌 용량 모지리.. <br>
 leetcode는 여러모로 좋다. 문제 난이도도 적당하고( 지금 내겐 아니다 ) 무엇보다 영어공부도 동시에 할 수 있다는 점! 
 
@@ -74,7 +64,6 @@ You are given an API bool isBadVersion(version) which returns whether version is
 
 <br>
 
-![img_1](../assets/images/post_img/2023-02-10-algorithm-binary-serach-img-2.PNG)
 나는 leecode에서 문제를 풀다보면 아래와 같이 예시로 작성된 부분에서도 몇가지 코딩 스타일(?)을 얻기도 한다.<br>
 함수가 시작되는 부분에 param과 return type을 같이 적어주는 부분이 굉장히 좋은 방법인 것 같다.<br>
 실제로 코드가 너무 길어지는 경우 내가 짠 코드를 내가 잊는 경우가 심히 많은데 이런 경우에 용이 할 것 같다.<br>
@@ -197,6 +186,5 @@ class Solution:
 
 이렇게 해서 Day 1의 이진트리 문제를 모두 간단하게 풀어보았다. <br>
 정말 코테는 하루라도 하지않으면,, 너무 빠르게 잊어버리는 것 같다.. <br><br>
-![img_2](../assets/images/post_img/2023-02-10-algorithm-binary-serach-img-1.PNG)
 
 
