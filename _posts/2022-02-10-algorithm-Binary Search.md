@@ -18,3 +18,7 @@ banner:
 tags: leetcode algorithm 알고리즘 BinarySearch
 sidebar: []
 ---
+
+```원하는 확장자 (ex. py, java, md 등)
+원하는 프로그래밍 코드 내용
+```
