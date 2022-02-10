@@ -24,7 +24,11 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
+<<<<<<< HEAD
 title: Weejiwon's Blog
+=======
+title: 위지원의 블로그 😎
+>>>>>>> 15718586fd60ee085188bc9ee92fd0fbe047686e
 email: upsidejiwon@gmail.com
 author: weejw
 
@@ -157,8 +161,13 @@ lang: "ko"  # default lang is en
 defaults:
   home:
     heading: "위지원의 블로그"
+<<<<<<< HEAD
     subheading: "공부와 개발하며 경험한 내용들을 기록합니다."
     banner: "Your image url"
+=======
+    subheading: "개발 공부 성장"
+#     banner: "Your image url"
+>>>>>>> 15718586fd60ee085188bc9ee92fd0fbe047686e
 
 # Banner default settings
 # These banner settings are for global banner default, but you can also
