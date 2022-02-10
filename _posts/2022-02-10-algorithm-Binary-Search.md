@@ -1,7 +1,7 @@
 ---
 layout: post
-title: [leetcode] Binary Search
-subtitle: [1/1000]
+title: Leet Code: Binary Search
+subtitle: 코딩테스트 공부
 author: weejw
 categories: algorithm
 banner:
@@ -21,8 +21,8 @@ sidebar: []
 요즘 코테를 그냥 아예 등지고 살아서 기초부터 다시해야한다.. 뇌 용량 모지리.. <br>
 leetcode는 여러모로 좋다. 문제 난이도도 적당하고( 지금 내겐 아니다 ) 무엇보다 영어공부도 동시에 할 수 있다는 점! 
 
-# Binary Search
-https://leetcode.com/problems/binary-search/
+## Binary Search
+[https://leetcode.com/problems/binary-search/](https://leetcode.com/problems/binary-search/)
 
 <u>EASY</u>
 
@@ -61,8 +61,8 @@ class Solution:
     
 ```
 
-# First Bad Version
-https://leetcode.com/problems/first-bad-version/
+## First Bad Version
+[https://leetcode.com/problems/first-bad-version/](https://leetcode.com/problems/first-bad-version/)
 
 <u>EASY</u>
 
@@ -74,7 +74,7 @@ You are given an API bool isBadVersion(version) which returns whether version is
 
 <br>
 
-![](../assets/images/post_img/2023-02-10-algorithm-binary-serach-img-2.PNG)
+![img_1](../assets/images/post_img/2023-02-10-algorithm-binary-serach-img-2.PNG)
 나는 leecode에서 문제를 풀다보면 아래와 같이 예시로 작성된 부분에서도 몇가지 코딩 스타일(?)을 얻기도 한다.<br>
 함수가 시작되는 부분에 param과 return type을 같이 적어주는 부분이 굉장히 좋은 방법인 것 같다.<br>
 실제로 코드가 너무 길어지는 경우 내가 짠 코드를 내가 잊는 경우가 심히 많은데 이런 경우에 용이 할 것 같다.<br>
@@ -165,8 +165,8 @@ class Solution(object):
 
 
 
-# Search Insert Position
-https://leetcode.com/problems/search-insert-position/
+## Search Insert Position
+[https://leetcode.com/problems/search-insert-position/](https://leetcode.com/problems/search-insert-position/)
 
 이정도면 그냥 공식처럼 외워진다..<br>
 left, right를 선언하고 right가 left보다 크거나 작을 때까지 반복하면서 mid index에 있는 데이터가 target인지 확인하고 그렇지 않으면 left, right를 옮겨준다.
@@ -197,6 +197,6 @@ class Solution:
 
 이렇게 해서 Day 1의 이진트리 문제를 모두 간단하게 풀어보았다. <br>
 정말 코테는 하루라도 하지않으면,, 너무 빠르게 잊어버리는 것 같다.. <br><br>
-![](../assets/images/post_img/2023-02-10-algorithm-binary-serach-img-1.PNG)
+![img_2](../assets/images/post_img/2023-02-10-algorithm-binary-serach-img-1.PNG)
 
 
