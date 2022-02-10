@@ -154,10 +154,10 @@ yat:
 #   - about.md
 
 # Page default value
-# defaults:
-   home:
-     heading: "위지원의 블로그"
-     subheading: "개발하면서 생겼던 일들, 공부한 것들을 올립니다. 기록을 좋아합니다 :)"
+defaults:
+  home:
+    heading: "위지원의 블로그"
+    subheading: "개발하면서 생겼던 일들, 공부한 것들을 올립니다. 기록을 좋아합니다 :)"
      #banner: "Your image url"
 
 # Banner default settings
