@@ -156,8 +156,8 @@ yat:
 # Page default value
 defaults:
   home:
-    heading: "위지원의 블로그"
-    subheading: "개발하면서 생겼던 일들, 공부한 것들을 올립니다. 기록을 좋아합니다 :)"
+    heading: "위지원의 TIL"
+    subheading: "내가 오늘 뭘 알아냈고 배우고 경험했을까요? 매일 기록합니다 🤗"
      #banner: "Your image url"
 
 # Banner default settings
