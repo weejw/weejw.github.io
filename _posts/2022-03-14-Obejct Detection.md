@@ -5,7 +5,7 @@ subtitle: The difference between 1-Stage and 2-Stage
 author: weejw
 categories: Data Processing
 
-tags: [Obejct Detection, TIL]
+tags: [Obejct Detection, Machine Learning]
 ---
 1. 2-stage Detector: Regional Proposal/ Classification을 순차적으로 진행함.<br>
 ex: R-CNN, Fast R-CNN 등
