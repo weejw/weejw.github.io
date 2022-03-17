@@ -1,6 +1,6 @@
 ---
 layout: post
-title: YOLO(You Only Look Once) v5 Xistom 데이터로 동작시키기
+title: YOLO(You Only Look Once) v5 Custom 데이터로 동작시키기
 subtitle: Object Detection 분야에 많이 알려진 모델 YOLO에 다른 데이터를 넣어보자 
 author: weejw
 categories: Machine-Learning
