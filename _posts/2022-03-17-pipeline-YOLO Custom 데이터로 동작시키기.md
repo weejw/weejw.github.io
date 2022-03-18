@@ -15,5 +15,5 @@ AI허브에 공개된 물고기 동영상 데이터를 이용했다.
 물론,, 데이터 양이 많으면 당연히 좋겠지만 일단 소량으로 진행해봤다.. 너무 적나 하하..
 ![2022-03-17- YOLO-custom-사용해보기-img-1](https://user-images.githubusercontent.com/33684393/158744130-3845d9f4-47c3-4d21-a30f-2c35cda0f469.PNG)
 
-으악 데이터가 너무 적었나보다.. 좀 더 라벨링이 필요하다. 
-![2022-03-17- YOLO-custom-사용해보기-img-2](https://user-images.githubusercontent.com/33684393/158749719-f9c59f60-26ba-4ccf-a186-e9e637be068a.PNG)
+오 그래도 탐지가 되긴한다. 
+![2022-03-17- YOLO-custom-사용해보기-img-2](https://user-images.githubusercontent.com/33684393/158949634-f17648e2-93dd-4957-a3ef-10922a4028e2.PNG)
