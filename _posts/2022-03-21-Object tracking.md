@@ -145,6 +145,28 @@ print("I count %d fish in this image" % fishCountNum)
     
 검출이 생각처럼 쉽진않다. 파라미터를 조정하는 법에 대해 더 알아봐야할 듯하다.
 
+
+## 오츠의 이진화 알고리즘
+[이 블로그](https://bkshin.tistory.com/entry/OpenCV-8-%EC%8A%A4%EB%A0%88%EC%8B%9C%ED%99%80%EB%94%A9Thresholding) 에 의하면 오츠의 진화 알고리즘은 thresholding 최적값을 자동으로 탐색해준다고 한다.<br>
+임의의 임곗값으로 시작해 두 부류의 명암 분포를 구하는 작업을 반복하다가 이 분포가 가장 균일할 때의 임곗값을 선택한다.
+결과는 아래와 같다. 오츠의 알고리즘에 의하면 최적의 임곗값은 95이다.
+
+![2022-03-21-obj-tracking-img-6](https://user-images.githubusercontent.com/33684393/159228448-2e6c0f61-96ee-4940-a3c7-730eb69516df.png)
+
+## 적응형 스레시홀딩
+<br> 그러나 일정하지 않은 조명, 배경색이 여러개일덴 이 것이 잘 맞지않는다고한다. 
+그리하여 사용되는 것이 적응형 스레시홀딩이다. 이는 이미지를 영역으로 나눠 주변 픽셀값만을 이용해 힘곗값을 구한다.<br>
+결과는 아래와 같다. 우측 상단이 전역 스레시홀딩에서 발생하는 전형적인 문제라고한다.  
+(* 전역 스레시홀딩: 임곘값을 넘으면 255/ 그렇지않으면0) 그늘 등으로 인해 발생한다.<br>
+적응형 스레시 홀딩을 적용한 아래 두 이미지는 상당히 선명하다.<br>
+좌측 하단은 평균값을 이용한 것이고 우측 하단은 가우시안 분포를 활용한 것이다. 평균값을 활용한 것이 선명도가 높고 노이즈가 비교했을 때 있으며 가우시안은 선명도는 떨어지나 노이즈는 적다.<br>
+대부분의 영상, 이미지는 그림자를 지니고있기때문에 전역 스레시홀딩이 아닌 적응형 스레시홀딩을 많이 쓴다고한다.
+
+![2022-03-21-obj-tracking-img-7](https://user-images.githubusercontent.com/33684393/159228450-0c48c115-7c54-45b4-a71a-f87fb725a20b.png)
+
+
+
+
 ## REFERENCES
 [https://engineer-mole.tistory.com/243](https://engineer-mole.tistory.com/243)<br>
 [https://crmn.tistory.com/50](https://crmn.tistory.com/50)
