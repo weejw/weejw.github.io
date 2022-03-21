@@ -146,6 +146,6 @@ print("I count %d fish in this image" % fishCountNum)
 검출이 생각처럼 쉽진않다. 파라미터를 조정하는 법에 대해 더 알아봐야할 듯하다.
 
 ## REFERENCES
-[https://engineer-mole.tistory.com/243](https://engineer-mole.tistory.com/243)
+[https://engineer-mole.tistory.com/243](https://engineer-mole.tistory.com/243)<br>
 [https://crmn.tistory.com/50](https://crmn.tistory.com/50)
 
