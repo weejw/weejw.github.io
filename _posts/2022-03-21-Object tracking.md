@@ -167,6 +167,14 @@ print("I count %d fish in this image" % fishCountNum)
 
 
 
+<br><3/23일 추가>
+
+[이 곳](https://riptutorial.com/opencv/example/29159/canny-edge-thresholds-prototyping-using-trackbars) 을 참고해서 코드를 track bar 기반으로 만들었다. 으흐흣.. 조절을 바로 할 수 있으니 좋다.
+
+![Hnet-image](https://user-images.githubusercontent.com/33684393/159423302-44b1c17c-e3e7-4b95-887f-3b6428df99ce.gif)
+
+
+
 ## REFERENCES
 [https://engineer-mole.tistory.com/243](https://engineer-mole.tistory.com/243)<br>
 [https://crmn.tistory.com/50](https://crmn.tistory.com/50)
