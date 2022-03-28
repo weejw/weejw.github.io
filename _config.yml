@@ -43,9 +43,9 @@ author: weejw
 copyright: "Unpublished Work (cleft) 2017-{currentYear} {author}"
 
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+
+  위지원의 TIL
+  나는 아테네에서 가장 똑똑한 사람임에 틀림없다. 왜냐하면 나는 내가 아무것도 모른다는 사실을 알기때문이다. -소크라테스
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. https://example.com
