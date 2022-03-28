@@ -1,11 +1,11 @@
 ---
 layout: post
-title: 데이터 디스커버리? 데이터 거버넌스?
-subtitle: 데이터 디스커버리, 거버넌스 뭘까? 
+title: airflow 기반의 데이터 파이프라인
+subtitle: airflow data pipeline book study 
 author: weejw
 categories: Data Pipeline
 
-tags: [data, data discovery]
+tags: [data, airflow, data pipeline]
 ---
 
 
