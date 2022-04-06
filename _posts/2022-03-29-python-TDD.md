@@ -1,6 +1,6 @@
 ---
 layout: post
-title: TDD(Test Driven Development) #1
+title: TDD(Test Driven Development) (1)
 subtitle: Python에서 TDD로 진행해보자. 
 author: weejw
 categories: python
