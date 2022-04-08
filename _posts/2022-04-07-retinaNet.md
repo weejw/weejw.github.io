@@ -3,7 +3,7 @@ layout: post
 title: RetinaNet
 subtitle: RetinaNet이 뭘까? 
 author: weejw
-ㅠ
+
 categories: Thesis
 
 tags: [Computer vision, Thesis, Object detection, Machine Learning]
