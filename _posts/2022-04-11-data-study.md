@@ -15,13 +15,17 @@ tags: [Data]
 다양한 원천을 그대로 가져와 저장하여 다양성을 보존함
 
 ### Data Mesh
-중앙 집중형 데이터 관리의 문제점으로 인해 생긴 분석 시스템 아키텍쳐로 Monolithic 구조를 가지고 있다.
+DL, DW에서 중앙 집중형 데이터 관리의 문제점으로 인해 생긴 분석 시스템 아키텍쳐로 Monolithic 구조를 가지고 있다.
 Monolithic 구조는 분석 플랫폼이 모든 도메인에 대해 단일 시스템과 단일 분석팀을 사용한다.
-즉, 업무별로 시스템과 팀을 분리하는 구조이다. 
+즉, 업무별로 시스템과 팀을 분리하는 구조이다. Data as-a-product 개념을 도입하였다.
+
+### Data book
+데이터 정의서라고 하며 코딩 작업을 할 때의 안내서같은 역할을 한다.
+
 
 ### DW(Data Warehouse)
 사용자 의사결정에 도움주기위한 데이터 베이스 집합
-
+ㅠ
 ### Staging 로딩
 source system으로부터 제공받은 데이터를 아무런 변화 없이 그대로 로딩하는 저장 공간, 임시 저장공간 성격
 
@@ -82,3 +86,4 @@ Legacy -> staging -> ODS -> DW -> DM -> 필요한 곳
 [https://velog.io/@sezzzini/%EA%B8%88%EC%9C%B5-IT-ETL-%EA%B3%BC-DW](https://velog.io/@sezzzini/%EA%B8%88%EC%9C%B5-IT-ETL-%EA%B3%BC-DW) <br>
 [https://simroot.tistory.com/25](https://simroot.tistory.com/25) <br>
 [https://bcho.tistory.com/1379](https://bcho.tistory.com/1379) <br>
+[https://loghada.tistory.com/9](https://loghada.tistory.com/9) <br>
