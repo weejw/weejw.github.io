@@ -3,7 +3,7 @@ layout: post
 title: Data 처리에 관련된 모든 용어
 subtitle: Data 처리와 관련된 용어를 알아보자.
 author: weejw
-categories: python
+categories: Data
 
 tags: [Data]
 ---

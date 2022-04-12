@@ -3,7 +3,7 @@ layout: post
 title: Object Detection Stage
 subtitle: The difference between 1-Stage and 2-Stage 
 author: weejw
-categories: Data Processing
+categories: Data-Processing
 
 tags: [Obejct Detection, Machine Learning]
 ---

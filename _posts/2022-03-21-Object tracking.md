@@ -3,7 +3,7 @@ layout: post
 title: Object tracking
 subtitle: Object tracking 방법에 대해 탐구한다. 
 author: weejw
-categories: Machine Learning
+categories: Machine-Learning
 
 tags: [Object tracking, Machine Learning]
 ---

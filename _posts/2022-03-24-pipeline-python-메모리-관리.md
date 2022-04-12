@@ -3,9 +3,9 @@ layout: post
 title: 파이썬 사용 시 메모리 최적화 
 subtitle: 파이썬 어플리케이션 이용 시 메모리를 어떻게 최적화할 수 있을까? 
 author: weejw
-categories: Data Pipeline
+categories: Data-Pipeline
 
-tags: [python, memory]
+tags: [Python, Memory]
 ---
 
 전에 TB급 데이터를 다루면서 메모리 관리가 얼마나 중요한지 알게되었다. 툭하면 파이프라인이 메모리로 터지곤했다...ㅠㅠ<br>
