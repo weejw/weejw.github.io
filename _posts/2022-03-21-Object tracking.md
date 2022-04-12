@@ -5,7 +5,7 @@ subtitle: Object tracking 방법에 대해 탐구한다.
 author: weejw
 categories: Machine-Learning
 
-tags: [Object tracking, Machine Learning]
+tags: [Object Tracking, Machine Learning]
 ---
 
 Object tracking을 위해선 각 프레임마다 나타나는 object간 유사성 비교가 반드시필요하다.

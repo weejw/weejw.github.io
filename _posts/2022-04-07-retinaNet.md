@@ -6,7 +6,7 @@ author: weejw
 
 categories: Thesis
 
-tags: [Computer vision, Thesis, Object Detection, Machine Learning]
+tags: [Computer Vision, Thesis, Object Detection, Machine Learning]
 ---
 
 ## RetinaNet이란? 
