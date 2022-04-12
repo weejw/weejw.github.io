@@ -5,7 +5,7 @@ subtitle: 데이터가 부족할 땐? Data Augmentation!
 author: weejw
 categories: Data
 
-tags: [Data, Computer vision, pre-prosessing]
+tags: [Data, Computer Vision, pre-prosessing]
 ---
  
 ## Data Augmentation

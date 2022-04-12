@@ -3,9 +3,9 @@ layout: post
 title: airflow 기반의 데이터 파이프라인
 subtitle: airflow data pipeline book study 
 author: weejw
-categories: Data Pipeline
+categories: Data-Pipeline
 
-tags: [data, airflow, data pipeline]
+tags: [Data, Airflow, Data Pipeline]
 ---
 
 
