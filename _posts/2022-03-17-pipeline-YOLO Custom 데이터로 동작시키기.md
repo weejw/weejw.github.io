@@ -5,7 +5,7 @@ subtitle: Object Detection 분야에 많이 알려진 모델 YOLO에 다른 데�
 author: weejw
 categories: Machine-Learning
 
-tags: [Obejct Detection, YOLOv5, Machine Leanring]
+tags: [Obejct Detection, YOLOv5, Machine Learning]
 ---
 AI허브에 공개된 물고기 동영상 데이터를 이용했다. 
 [https://aihub.or.kr/aidata/30735](https://aihub.or.kr/aidata/30735)
