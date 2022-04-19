@@ -12,14 +12,13 @@ tags: [JavaScript]
 
 
 - 니꼴라스쌤이 생각하는 element를 가져오는 가장 멋진 방법 
-css 방식으로 element 찾는 것이 가능하다. class name이 hello이고 element가 h1일 때
+css 방식으로 element 찾는 것이 가능하다. 
 ```javascript
+// class name이 hello이고 element가 h1일 때
 document.querySelector(".hello h1")
 document.querySelectorAll(".hello h1")
-```
 
-hello가 id인 경우에
-```javascript
+// id의 경우
 document.querySelectorAll("#hello")
 ```
 
