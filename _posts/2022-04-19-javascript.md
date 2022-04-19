@@ -13,7 +13,7 @@ tags: [JavaScript]
 
 - 니꼴라스쌤이 생각하는 element를 가져오는 가장 멋진 방법 
 css 방식으로 element 찾는 것이 가능하다. <br>
-- 
+
 ```javascript
 
 // class name이 hello이고 element가 h1일 때
