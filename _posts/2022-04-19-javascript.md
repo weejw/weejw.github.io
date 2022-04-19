@@ -24,7 +24,8 @@ document.querySelectorAll("#hello")
 ```
 
 - 이벤트 처리 방법
-아래 코드처럼 element를 가져오고 해당 element에 event를 추가할 수 있다. 
+아래 코드처럼 element를 가져오고 해당 element에 event를 추가할 수 있다. <br>
+
 ```javascript
 const title = document.querySelector("div.hello:first-child h1")
 
