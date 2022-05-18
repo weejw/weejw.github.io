@@ -24,7 +24,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: 위지원의 TIL
+title: 위지원의 깃블로그
 email: wldnjs5454@gmail.com
 author: weejw
 
@@ -44,7 +44,7 @@ copyright: "Unpublished Work (cleft) 2017-{currentYear} {author}"
 
 description: >- # this means to ignore newlines until "baseurl:"
 
-  위지원의 TIL
+  위지원의 깃블로그
   나는 아테네에서 가장 똑똑한 사람임에 틀림없다. 왜냐하면 나는 내가 아무것도 모른다는 사실을 알기때문이다. -소크라테스
 
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -156,7 +156,7 @@ yat:
 # Page default value
 defaults:
   home:
-    heading: "위지원의 TIL"
+    heading: "위지원의 깃블로그"
     subheading: "나는 아테네에서 가장 똑똑한 사람임에 틀림없다. 왜냐하면 나는 내가 아무것도 모른다는 사실을 알기때문이다. -소크라테스"
      #banner: "Your image url"
 
@@ -170,6 +170,7 @@ defaults:
 #   start_at: 0             # Video start time
 #   image: null             # Image banner source
 #   opacity: 1.0            # Banner opacity (100% is 1.0)
+#   background: "rgba(0, 0, 0, 0.8)"  # Banner background (Could be a image)
 #   background: "rgba(0, 0, 0, 0.8)"  # Banner background (Could be a image)
 #   height: "640px"         # Banner default height
 #   min_height: null        # Banner minimum height
