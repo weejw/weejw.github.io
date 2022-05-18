@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>airflow 기반의 데이터 파이프라인 | 위지원의 깃블로그</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="airflow 기반의 데이터 파이프라인">
+<meta name="author" content="weejw">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="출시하자마자 책을 샀는데 이제서야 들여다본다. 상반기내로 이 책을 끝내길 바란다. 근데 개인적으로 책 홍보이미지 너무 ㅋㅋ 무슨 분양글인줄 알았다.">
+<meta property="og:description" content="출시하자마자 책을 샀는데 이제서야 들여다본다. 상반기내로 이 책을 끝내길 바란다. 근데 개인적으로 책 홍보이미지 너무 ㅋㅋ 무슨 분양글인줄 알았다.">
+<link rel="canonical" href="/jekyll-theme-yat/data-pipeline/2022/03/28/airflow-book-1.html">
+<meta property="og:url" content="/jekyll-theme-yat/data-pipeline/2022/03/28/airflow-book-1.html">
+<meta property="og:site_name" content="위지원의 깃블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-03-28T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="airflow 기반의 데이터 파이프라인">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"weejw"},"dateModified":"2022-03-28T00:00:00+00:00","datePublished":"2022-03-28T00:00:00+00:00","description":"출시하자마자 책을 샀는데 이제서야 들여다본다. 상반기내로 이 책을 끝내길 바란다. 근데 개인적으로 책 홍보이미지 너무 ㅋㅋ 무슨 분양글인줄 알았다.","headline":"airflow 기반의 데이터 파이프라인","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/data-pipeline/2022/03/28/airflow-book-1.html"},"url":"/jekyll-theme-yat/data-pipeline/2022/03/28/airflow-book-1.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="위지원의 깃블로그">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+  <style> 
+    ::-webkit-scrollbar{width: 10px;}
+    ::-webkit-scrollbar-track {background-color:hsl(0, 0%, 0%); border-radius: 12px;}
+    ::-webkit-scrollbar-thumb {background-color:#ffffff; border-radius: 12px;}
+    ::-webkit-scrollbar-thumb:hover {background: #ff0800;}
+    ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+    {
+        width:12px;height:12px;background:transparent;}
+    } 
+  </style>
+    
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="위지원의 깃블로그" src="" onerror="this.style.display='none'">
+  위지원의 깃블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">CONTACT ME</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">airflow 기반의 데이터 파이프라인</h1>
+  <h2 class="post-subtitle">airflow data pipeline book study</h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-03-28T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Mar 28, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 3 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Data">#Data</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Airflow">#Airflow</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Data%20Pipeline">#Data Pipeline</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+      <div class="toc">
+        <a href="#">&lt;맨 위로&gt;</a>
+        <ul>
+<li><a href="#airflow-%EC%99%9C%EC%8D%A8%EC%95%BC%ED%95%B4">Airflow, 왜써야해?</a></li>
+<li><a href="#airflow-%EC%9D%B4%EB%9F%B4%EB%95%90-%EC%93%B0%EC%A7%80%EB%A7%90%EC%95%84%EC%95%BC%EB%8F%BC">Airflow, 이럴땐 쓰지말아야돼!</a></li>
+<li><a href="#%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%88%98%EC%A7%91%ED%95%B4%EB%B3%B4%EC%9E%90">데이터 수집해보자</a></li>
+<li><a href="#task%EC%99%80-operator%EC%9D%98-%EC%B0%A8%EC%9D%B4%EA%B0%80-%EB%AD%98%EA%B9%8C">Task와 Operator의 차이가 뭘까?</a></li>
+<li><a href="#%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%8B%A4%ED%96%89%ED%95%B4%EB%B3%B4%EC%9E%90">코드를 실행해보자!</a></li>
+<li><a href="#%EB%8F%84%EC%BB%A4%EB%A1%9C-%EC%8B%A4%ED%96%89%ED%95%B4%EB%B3%B4%EA%B8%B0">도커로 실행해보기</a></li>
+</ul>
+
+      </div>
+      <p>출시하자마자 책을 샀는데 이제서야 들여다본다. 상반기내로 이 책을 끝내길 바란다. <del>근데 개인적으로 책 홍보이미지 너무 ㅋㅋ 무슨 분양글인줄 알았다.</del><br>
+<img src="https://user-images.githubusercontent.com/33684393/160342956-5998c0e3-9900-49b6-942b-695b022e94bb.png" width="200" height="200">    <img src="https://user-images.githubusercontent.com/33684393/160343314-ebbc7c68-1079-4c9a-86d5-c84971886d59.png" width="300" height="400"> <br></p>
+
+<p>** 모든 예제 코드는 <a href="https://github.com/K9Ns/data-pipelines-with-apache-airflow">https://github.com/K9Ns/data-pipelines-with-apache-airflow</a> 에 있다. 미리 clone 해두자.. 물론 직접 타이핑하는 것도 좋고~</p>
+
+<h2 id="airflow-왜써야해">Airflow, 왜써야해?</h2>
+<ul>
+  <li>확장성</li>
+  <li>python 기반</li>
+  <li>다양한 스케쥴링 기법</li>
+  <li>백필 기능</li>
+  <li>나이스한 web UI</li>
+</ul>
+
+<h2 id="airflow-이럴땐-쓰지말아야돼">Airflow, 이럴땐 쓰지말아야돼!</h2>
+<ul>
+  <li>Streaming processing</li>
+  <li>추가 및 삭제가 빈번한 동적 파이프라인</li>
+  <li>python을 모를 때</li>
+</ul>
+
+<h2 id="데이터-수집해보자">데이터 수집해보자</h2>
+
+<p><a href="https://thespacedevs.com/llapi">https://thespacedevs.com/llapi</a> 이 api를 사용하는데, 보면 아래와 같은 엔드포인트가 존재한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/160344821-45ff562b-a6a3-4b50-b3ac-545e712cdc30.png" alt="image"></p>
+
+<p>데이터는 위 api를 이용해 수집하며 그 코드는 깃헙에 있다. <br>
+다음은 깃헙 소스의 chapter02/dags/download_rocket_launches.py 코드의 일부다. 이 외에는 BashOperator나 PythonOperator 등이 있다. 기초기때문에 숙숙 지나가겠다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dag</span> <span class="o">=</span> <span class="n">DAG</span><span class="p">(</span>
+    <span class="n">dag_id</span><span class="o">=</span><span class="s">"download_rocket_launches"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s">"Download rocket pictures of recently launched rockets."</span><span class="p">,</span>
+    <span class="n">start_date</span><span class="o">=</span><span class="n">airflow</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">dates</span><span class="p">.</span><span class="n">days_ago</span><span class="p">(</span><span class="mi">14</span><span class="p">),</span> <span class="c1"># 시작날짜
+</span>    <span class="n">schedule_interval</span><span class="o">=</span><span class="s">"@daily"</span><span class="p">,</span> <span class="c1"># 시작 주기
+</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="task와-operator의-차이가-뭘까">Task와 Operator의 차이가 뭘까?</h2>
+
+<ul>
+  <li>Airflow에서 Task는 작업의 올바른 실행을 보장하기 위한 <u>오퍼레이터의 Wrapper 또는 Manager이다.</u> <br>
+</li>
+  <li>Airflow는 Task를 통해 작업을 올바르게 실행할 수 있다. <br>
+</li>
+  <li>Task는 Operator의 상태를 관리하고 사용자에게 상태 변경을 표시하는 airflow의 내장 컴포넌트이다.</li>
+  <li>DAG는 오퍼레이터 집합에 대한 실행을 오케스트레이션하는 역할을 한다.</li>
+</ul>
+
+<h2 id="코드를-실행해보자">코드를 실행해보자!</h2>
+
+<p>위 깃헙에있는 코드를 실행해보자. 그 전에 일단 필요한 것부터..</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>conda create <span class="nt">-n</span> airflow
+<span class="nv">$ </span>pip <span class="nb">install </span>apache-airflow
+<span class="nv">$ </span>airflow db init
+<span class="nv">$ </span>airflow <span class="nb">users </span>create <span class="se">\</span>
+          <span class="nt">--username</span> admin <span class="se">\</span>
+          <span class="nt">--firstname</span> FIRST_NAME <span class="se">\</span>
+          <span class="nt">--lastname</span> LAST_NAME <span class="se">\</span>
+          <span class="nt">--role</span> Admin <span class="se">\</span>
+          <span class="nt">--email</span> admin@example.org
+<span class="nv">$ </span><span class="nb">cp </span>github_repo/download_rocket_launches.py airflow/dags
+<span class="nv">$ </span>airflow webserve <span class="nt">-D</span>
+<span class="nv">$ </span>airflow scheduler <span class="nt">-D</span>
+</code></pre></div></div>
+
+<p>그리고 나서 localhost:8080으로 진입하면 아무 문제없이 화면을 띄울 수 있다. 맨 위에 새로 추가한 DAG가 보인다. 실행해보자. 실행도 문제없다..
+<img src="https://user-images.githubusercontent.com/33684393/160352516-6395932d-c1c2-49c1-b863-ce7577912171.png" alt="image"> <br>
+<img src="https://user-images.githubusercontent.com/33684393/160353191-1687dd08-388c-40bc-9e79-281f2a99976e.png" alt="image"> <br>
+<img src="https://user-images.githubusercontent.com/33684393/160353300-ceab6a4b-2fd2-4bb2-9370-037ccf6ae7db.png" alt="image"> <br></p>
+
+<h2 id="도커로-실행해보기">도커로 실행해보기</h2>
+
+<p>깃헙 소스코드에 보면 script 폴더 아래에 docker로 실행하는 명령어가 저장되어있다. 이를 진행해보자.<br></p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker run <span class="se">\</span>
+<span class="nt">-it</span> <span class="se">\</span>
+<span class="nt">-p</span> 8080:8080 <span class="se">\</span>
+<span class="nt">-v</span> /home/weejw/airflow/data-pipelines-with-apache-airflow/chapter02/dags/download_rocket_launches.py:/opt/airflow/dags/download_rocket_launches.py <span class="se">\</span>
+<span class="nt">--name</span> airflow <span class="se">\</span>
+<span class="nt">--entrypoint</span><span class="o">=</span>/bin/bash <span class="se">\ </span>
+apache/airflow:2.0.0-python3.8 <span class="se">\</span>
+<span class="nt">-c</span> <span class="s1">'( \
+airflow db init &amp;&amp; \
+airflow users create --username admin --password admin --firstname Anonymous --lastname Admin --role Admin --email admin@example.org \
+); \
+airflow webserver &amp; \
+airflow scheduler \
+'</span>
+</code></pre></div></div>
+
+<p>전혀 문제없이 실행된다 :) image 파일도 도커내에 생성된 것을 확인할 수있었다. <br>
+<img src="https://user-images.githubusercontent.com/33684393/160355987-fc768e11-4aff-4d40-95d0-e0de418757e7.png" alt="image"> <br></p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span>airflow<span class="o">)</span> weejw@DESKTOP-LQRSEG1:~<span class="nv">$ </span>docker <span class="nb">exec</span> <span class="nt">-it</span> airflow /bin/bash
+airflow@02ca7330e8cf:/opt/airflow<span class="nv">$ </span><span class="nb">ls
+</span>airflow-webserver.pid  airflow.cfg  airflow.db  dags  logs  unittests.cfg  webserver_config.py
+airflow@02ca7330e8cf:/opt/airflow<span class="nv">$ </span><span class="nb">cd</span> /tmp/images/
+airflow@02ca7330e8cf:/tmp/images<span class="nv">$ </span><span class="nb">ls
+</span>electron_image_20190705175640.jpeg        long2520march252011_image_20190222031217.jpeg
+falcon2520925_image_20210310075447.jpeg   long_march_6_image_20210709074933.jpg
+falcon2520925_image_20220308100515.jpeg   new2520shepard_image_20190207032624.jpeg
+falcon2520925_image_20220324065634.png    zhuque-2_image_20200905210848.jpg
+falcon_9_block__image_20210506060831.jpg
+</code></pre></div></div>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/data-pipeline/2022/03/25/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%94%94%EC%8A%A4%EC%BB%A4%EB%B2%84%EB%A6%AC.html" title="데이터 디스커버리? 데이터 거버넌스?">데이터 디스커버리? 데이터 거버넌스?</a><a class="next" href="/jekyll-theme-yat/python/2022/03/29/python-TDD.html" title="TDD(Test Driven Development) (1)">TDD(Test Driven Development) (1)</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/javascript/2022/04/19/javascript.html" title="TDD(Test Driven Development) (1)">JavaScript 기본만 빠르게 살펴보기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/thesis/2022/04/07/retinaNet.html" title="TDD(Test Driven Development) (1)">RetinaNet</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/machine-learning/2022/03/17/pipeline-YOLO-Custom-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A1%9C-%EB%8F%99%EC%9E%91%EC%8B%9C%ED%82%A4%EA%B8%B0.html" title="TDD(Test Driven Development) (1)">YOLO(You Only Look Once) v5 Custom 데이터로 동작시키기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data-pipeline/2022/03/25/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%94%94%EC%8A%A4%EC%BB%A4%EB%B2%84%EB%A6%AC.html" title="TDD(Test Driven Development) (1)">데이터 디스커버리? 데이터 거버넌스?</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  function getTOCNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var tocNodes = nodes.filter(function(elem) {
+        return elem.tagName == "A";
+    });
+    return tocNodes;
+  }
+  function getHeaderNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var headerNodes = nodes.filter(function(elem) {
+        return elem.tagName == "H1" || elem.tagName == "H2" || elem.tagName == "H3" || elem.tagName == "H4" || elem.tagName == "H5" || elem.tagName == "H6";
+    });
+    return headerNodes;
+  }
+
+  var title = document.getElementsByClassName("post-title")[0];
+  var titleY = window.pageYOffset + title.getBoundingClientRect().top;
+  
+  var article = document.getElementsByClassName("post-article")[0];
+  var articleY = window.pageYOffset + article.getBoundingClientRect().top;
+
+  var toc = document.getElementsByClassName("toc")[0];
+
+  var headerNodes = getHeaderNodes(article);
+  var tocNodes = getTOCNodes(toc);
+
+  var before = undefined;
+
+  document.addEventListener('scroll', function(e) {
+    if (window.scrollY >= articleY-60) {
+      toc.style.cssText = "position: fixed; top: 60px;";
+    }
+    else {
+      toc.style.cssText = "";
+    }
+
+    var current = headerNodes.filter(function(header) {
+      var headerY = window.pageYOffset + header.getBoundingClientRect().top;
+      return window.scrollY >= headerY - 60;
+    });
+
+    if (current.length > 0) {
+      current = current[current.length-1];
+
+      var currentA = tocNodes.filter(function(tocNode) {
+        return tocNode.innerHTML == current.innerHTML;
+      })
+      
+      currentA = currentA[0];
+      if (currentA) {
+        if (before == undefined) before = currentA;
+
+        if (before != currentA) {
+          before.classList.remove("toc-active");
+          before = currentA;
+        }
+
+        currentA.classList.add("toc-active");
+      }
+      else {
+        if (before) 
+          before.classList.remove("toc-active");
+      }
+    }
+    else {
+      if (before) 
+          before.classList.remove("toc-active");
+    }
+
+  }, false);
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Unpublished Work <span class="copyleft">©</span> 2017-2022 weejw</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/jekyll-theme-yat/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

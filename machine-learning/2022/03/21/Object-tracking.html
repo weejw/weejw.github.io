@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Object tracking | 위지원의 깃블로그</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="Object tracking">
+<meta name="author" content="weejw">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Object tracking을 위해선 각 프레임마다 나타나는 object간 유사성 비교가 반드시필요하다. 이를 위해서는 이미 연구가 많이 되어있는 상태 Deep Sort, roboflow의 CLIP, 국내에서도 Deep Learing을 기반으로 한 Feature Extraction 알고리즘의 분석 이 있다.">
+<meta property="og:description" content="Object tracking을 위해선 각 프레임마다 나타나는 object간 유사성 비교가 반드시필요하다. 이를 위해서는 이미 연구가 많이 되어있는 상태 Deep Sort, roboflow의 CLIP, 국내에서도 Deep Learing을 기반으로 한 Feature Extraction 알고리즘의 분석 이 있다.">
+<link rel="canonical" href="/jekyll-theme-yat/machine-learning/2022/03/21/Object-tracking.html">
+<meta property="og:url" content="/jekyll-theme-yat/machine-learning/2022/03/21/Object-tracking.html">
+<meta property="og:site_name" content="위지원의 깃블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-03-21T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Object tracking">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"weejw"},"dateModified":"2022-03-21T00:00:00+00:00","datePublished":"2022-03-21T00:00:00+00:00","description":"Object tracking을 위해선 각 프레임마다 나타나는 object간 유사성 비교가 반드시필요하다. 이를 위해서는 이미 연구가 많이 되어있는 상태 Deep Sort, roboflow의 CLIP, 국내에서도 Deep Learing을 기반으로 한 Feature Extraction 알고리즘의 분석 이 있다.","headline":"Object tracking","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/machine-learning/2022/03/21/Object-tracking.html"},"url":"/jekyll-theme-yat/machine-learning/2022/03/21/Object-tracking.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="위지원의 깃블로그">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+  <style> 
+    ::-webkit-scrollbar{width: 10px;}
+    ::-webkit-scrollbar-track {background-color:hsl(0, 0%, 0%); border-radius: 12px;}
+    ::-webkit-scrollbar-thumb {background-color:#ffffff; border-radius: 12px;}
+    ::-webkit-scrollbar-thumb:hover {background: #ff0800;}
+    ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+    {
+        width:12px;height:12px;background:transparent;}
+    } 
+  </style>
+    
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="위지원의 깃블로그" src="" onerror="this.style.display='none'">
+  위지원의 깃블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">CONTACT ME</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">Object tracking</h1>
+  <h2 class="post-subtitle">Object tracking 방법에 대해 탐구한다.</h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-03-21T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Mar 21, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 5 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Object%20Tracking">#Object Tracking</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Machine%20Learning">#Machine Learning</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+      <div class="toc">
+        <a href="#">&lt;맨 위로&gt;</a>
+        <ul>
+<li><a href="#%EC%98%A4%EC%B8%A0%EC%9D%98-%EC%9D%B4%EC%A7%84%ED%99%94-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98">오츠의 이진화 알고리즘</a></li>
+<li><a href="#%EC%A0%81%EC%9D%91%ED%98%95-%EC%8A%A4%EB%A0%88%EC%8B%9C%ED%99%80%EB%94%A9">적응형 스레시홀딩</a></li>
+<li><a href="#references">REFERENCES</a></li>
+</ul>
+
+      </div>
+      <p>Object tracking을 위해선 각 프레임마다 나타나는 object간 유사성 비교가 반드시필요하다.
+이를 위해서는 이미 연구가 많이 되어있는 상태 <a href="https://github.com/nwojke/deep_sort">Deep Sort</a>, roboflow의 <a href="https://blog.roboflow.com/clip-model-eli5-beginner-guide/">CLIP</a>, 국내에서도 <a href="https://www.koreascience.or.kr/article/JAKO202020455277386.pdf">Deep Learing을 기반으로 한 Feature Extraction 알고리즘의 분석</a> 이 있다. <br></p>
+
+<p>지난번에 YOLO 모델을 돌리기위해 일일히 라벨링을 해야했다. 물론 좋은 데이터의 품질을 위해선 이런 라벨링이 필수적이라고 생각하지만 조금 더 수월하게 진행할 방법이 없을까? 라는 생각이 들었다.<br></p>
+
+<p>너무 어렵게 접근하려는 것 같다는 생각이 문득 들었다.<br> 
+YOLO 모델까지도 가지않고 정확히 feature extraction =&gt; tracking만 우선적으로 진행하는 방안을 찾아야했다.<br>
+<a href="https://github.com/alexkychen/Auto-Fish-Counter">https://github.com/alexkychen/Auto-Fish-Counter</a> 이 깃 허브에 가면 짧고 간결하게 코드가 작성되어있었다.<br></p>
+
+<p>내가 필요한 부분은 아래 단 몇 줄이었다. 위에 한국어 논문에도 나와있는 과정과 유사해보였다.<br>
+결론적으론 contours를 찾으려 Canny 엣지를 추출한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">camera</span><span class="p">.</span><span class="n">capture_continuous</span><span class="p">(</span><span class="n">rawCapture</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s">'bgr'</span><span class="p">,</span> <span class="n">use_video_port</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">frame</span><span class="p">.</span><span class="n">array</span>
+        <span class="n">grayimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+        <span class="n">blurimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">grayimage</span><span class="p">,</span> <span class="p">(</span><span class="n">blursize</span><span class="p">,</span> <span class="n">blursize</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">T</span><span class="p">,</span> <span class="n">threshimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">blurimage</span><span class="p">,</span> <span class="n">threshVal</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
+        <span class="n">edgedimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Canny</span><span class="p">(</span><span class="n">threshimage</span><span class="p">,</span> <span class="n">cannyMin</span><span class="p">,</span> <span class="n">cannyMax</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">'frame'</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">cnts</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">edgedimage</span><span class="p">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">cv2</span><span class="p">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
+        <span class="n">fishCountNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnts</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"I count %d fish in this image"</span> <span class="o">%</span> <span class="n">fishCountNum</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>우선 <a href="https://engineer-mole.tistory.com/243">이 블로그</a> 에 기반하여 가장 기본부터 진행하기위해 gray scale로 변환한 뒤 canny 작업을 진행했다.(위 논문에 의하면 이를 2차 미분에 의한 엣지 추출로 정의한다)<br>
+threshold2는 경계 유무를 판단하는 임곗값이고, threshold1은 이 경계들이 이어질지에 대한 값이라고한다. 자세한 내용은 위 블로그에 상세하게 적혀있다.<br></p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159224773-7be75046-85f0-428f-8e56-1ae15e3beee5.png" alt="2022-03-21-obj-tracking-img-1"></p>
+
+<p>그리고나서 위 깃허브에 있는 코드를 가지고도 해보았다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">"figure.figsize"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="s">"swim_bp_2020-12-20-10-18_02-32-41_300.jpg"</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">IMREAD_COLOR</span><span class="p">)</span>
+<span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">rgb</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># 1행 2열에서 1번째 열
+</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">([])</span> <span class="c1"># x축 좌표 숨김
+</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">([])</span> <span class="c1"># y축 좌표 숨김
+</span>
+
+
+<span class="n">plt</span><span class="p">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 1행 2열에서 2번째 열
+</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s">'gray'</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">([])</span> <span class="c1"># x축 좌표 숨김
+</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">([])</span> <span class="c1"># y축 좌표 숨김
+</span>
+
+
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+
+
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159224774-7f77ac6f-a38c-44de-9ecf-3c7aa0d83e14.png" alt="2022-03-21-obj-tracking-img-2"></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">blurimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">gray</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">blurimage</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159224778-29f5bc3a-c050-4377-a4c8-c05e7a149d55.png" alt="2022-03-21-obj-tracking-img-3"></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">T</span><span class="p">,</span> <span class="n">threshimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">threshold</span><span class="p">(</span><span class="n">blurimage</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">THRESH_BINARY</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">threshimage</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159224779-4828de93-3a04-4410-ade1-214cfc02b865.png" alt="2022-03-21-obj-tracking-img-4"></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">threshold1</span><span class="o">=</span><span class="mi">50</span>
+<span class="n">threshold2</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">edgedimage</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">Canny</span><span class="p">(</span><span class="n">threshimage</span><span class="p">,</span> <span class="n">threshold1</span><span class="p">,</span> <span class="n">threshold2</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s">'t1=</span><span class="si">{</span><span class="n">threshold1</span><span class="si">}</span><span class="s">, t2=</span><span class="si">{</span><span class="n">threshold2</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">edgedimage</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159224780-96af86ea-6a9f-4a33-b271-539444089a91.png" alt="2022-03-21-obj-tracking-img-5"></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">cnts</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">findContours</span><span class="p">(</span><span class="n">edgedimage</span><span class="p">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">cv2</span><span class="p">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">CHAIN_APPROX_SIMPLE</span><span class="p">)</span>
+<span class="n">fishCountNum</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnts</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"I count %d fish in this image"</span> <span class="o">%</span> <span class="n">fishCountNum</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I count 1986 fish in this image
+</code></pre></div></div>
+
+<p>검출이 생각처럼 쉽진않다. 파라미터를 조정하는 법에 대해 더 알아봐야할 듯하다.</p>
+
+<h2 id="오츠의-이진화-알고리즘">오츠의 이진화 알고리즘</h2>
+<p><a href="https://bkshin.tistory.com/entry/OpenCV-8-%EC%8A%A4%EB%A0%88%EC%8B%9C%ED%99%80%EB%94%A9Thresholding">이 블로그</a> 에 의하면 오츠의 진화 알고리즘은 thresholding 최적값을 자동으로 탐색해준다고 한다.<br>
+임의의 임곗값으로 시작해 두 부류의 명암 분포를 구하는 작업을 반복하다가 이 분포가 가장 균일할 때의 임곗값을 선택한다.
+결과는 아래와 같다. 오츠의 알고리즘에 의하면 최적의 임곗값은 95이다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159228448-2e6c0f61-96ee-4940-a3c7-730eb69516df.png" alt="2022-03-21-obj-tracking-img-6"></p>
+
+<h2 id="적응형-스레시홀딩">적응형 스레시홀딩</h2>
+<p><br> 그러나 일정하지 않은 조명, 배경색이 여러개일덴 이 것이 잘 맞지않는다고한다. 
+그리하여 사용되는 것이 적응형 스레시홀딩이다. 이는 이미지를 영역으로 나눠 주변 픽셀값만을 이용해 힘곗값을 구한다.<br>
+결과는 아래와 같다. 우측 상단이 전역 스레시홀딩에서 발생하는 전형적인 문제라고한다.<br>
+(* 전역 스레시홀딩: 임곘값을 넘으면 255/ 그렇지않으면0) 그늘 등으로 인해 발생한다.<br>
+적응형 스레시 홀딩을 적용한 아래 두 이미지는 상당히 선명하다.<br>
+좌측 하단은 평균값을 이용한 것이고 우측 하단은 가우시안 분포를 활용한 것이다. 평균값을 활용한 것이 선명도가 높고 노이즈가 비교했을 때 있으며 가우시안은 선명도는 떨어지나 노이즈는 적다.<br>
+대부분의 영상, 이미지는 그림자를 지니고있기때문에 전역 스레시홀딩이 아닌 적응형 스레시홀딩을 많이 쓴다고한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159228450-0c48c115-7c54-45b4-a71a-f87fb725a20b.png" alt="2022-03-21-obj-tracking-img-7"></p>
+
+<p><br>&lt;3/23일 추가&gt;</p>
+
+<p><a href="https://riptutorial.com/opencv/example/29159/canny-edge-thresholds-prototyping-using-trackbars">이 곳</a> 을 참고해서 코드를 track bar 기반으로 만들었다. 으흐흣.. 조절을 바로 할 수 있으니 좋다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159423302-44b1c17c-e3e7-4b95-887f-3b6428df99ce.gif" alt="Hnet-image"></p>
+
+<h2 id="references">REFERENCES</h2>
+<p><a href="https://engineer-mole.tistory.com/243">https://engineer-mole.tistory.com/243</a><br>
+<a href="https://crmn.tistory.com/50">https://crmn.tistory.com/50</a></p>
+
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/data-pipeline/2022/03/18/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0.html" title="ELK + beats 시작하기">ELK + beats 시작하기</a><a class="next" href="/jekyll-theme-yat/machine-learning/2022/03/22/zero-shot.html" title="zero-shot">zero-shot</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/machine-learning/2022/03/16/YOLO-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0.html" title="zero-shot">YOLO(You Only Look Once) v5 사용해보기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data/2022/04/11/data-study.html" title="zero-shot">Data 처리에 관련된 모든 용어</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data/2022/04/12/data-argumentation.html" title="zero-shot">Data Augmentation</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html" title="zero-shot">파이썬 사용 시 메모리 최적화</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  function getTOCNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var tocNodes = nodes.filter(function(elem) {
+        return elem.tagName == "A";
+    });
+    return tocNodes;
+  }
+  function getHeaderNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var headerNodes = nodes.filter(function(elem) {
+        return elem.tagName == "H1" || elem.tagName == "H2" || elem.tagName == "H3" || elem.tagName == "H4" || elem.tagName == "H5" || elem.tagName == "H6";
+    });
+    return headerNodes;
+  }
+
+  var title = document.getElementsByClassName("post-title")[0];
+  var titleY = window.pageYOffset + title.getBoundingClientRect().top;
+  
+  var article = document.getElementsByClassName("post-article")[0];
+  var articleY = window.pageYOffset + article.getBoundingClientRect().top;
+
+  var toc = document.getElementsByClassName("toc")[0];
+
+  var headerNodes = getHeaderNodes(article);
+  var tocNodes = getTOCNodes(toc);
+
+  var before = undefined;
+
+  document.addEventListener('scroll', function(e) {
+    if (window.scrollY >= articleY-60) {
+      toc.style.cssText = "position: fixed; top: 60px;";
+    }
+    else {
+      toc.style.cssText = "";
+    }
+
+    var current = headerNodes.filter(function(header) {
+      var headerY = window.pageYOffset + header.getBoundingClientRect().top;
+      return window.scrollY >= headerY - 60;
+    });
+
+    if (current.length > 0) {
+      current = current[current.length-1];
+
+      var currentA = tocNodes.filter(function(tocNode) {
+        return tocNode.innerHTML == current.innerHTML;
+      })
+      
+      currentA = currentA[0];
+      if (currentA) {
+        if (before == undefined) before = currentA;
+
+        if (before != currentA) {
+          before.classList.remove("toc-active");
+          before = currentA;
+        }
+
+        currentA.classList.add("toc-active");
+      }
+      else {
+        if (before) 
+          before.classList.remove("toc-active");
+      }
+    }
+    else {
+      if (before) 
+          before.classList.remove("toc-active");
+    }
+
+  }, false);
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Unpublished Work <span class="copyleft">©</span> 2017-2022 weejw</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/jekyll-theme-yat/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

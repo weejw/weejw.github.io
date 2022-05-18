@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>luigi | 위지원의 깃블로그</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="luigi">
+<meta name="author" content="weejw">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="서론 혼자 짜투리 시간에 뚝딱뚝딱 뭔가를 만들어보고있는 중인데, Daily로 돌아가야 하는 코드가 있었다. 그래서 이걸 pipeline에 실어서 돌리고자 한다.">
+<meta property="og:description" content="서론 혼자 짜투리 시간에 뚝딱뚝딱 뭔가를 만들어보고있는 중인데, Daily로 돌아가야 하는 코드가 있었다. 그래서 이걸 pipeline에 실어서 돌리고자 한다.">
+<link rel="canonical" href="/jekyll-theme-yat/data-pipeline/2022/02/14/luigi.html">
+<meta property="og:url" content="/jekyll-theme-yat/data-pipeline/2022/02/14/luigi.html">
+<meta property="og:site_name" content="위지원의 깃블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-02-14T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="luigi">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"weejw"},"dateModified":"2022-02-14T00:00:00+00:00","datePublished":"2022-02-14T00:00:00+00:00","description":"서론 혼자 짜투리 시간에 뚝딱뚝딱 뭔가를 만들어보고있는 중인데, Daily로 돌아가야 하는 코드가 있었다. 그래서 이걸 pipeline에 실어서 돌리고자 한다.","headline":"luigi","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/data-pipeline/2022/02/14/luigi.html"},"url":"/jekyll-theme-yat/data-pipeline/2022/02/14/luigi.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="위지원의 깃블로그">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+  <style> 
+    ::-webkit-scrollbar{width: 10px;}
+    ::-webkit-scrollbar-track {background-color:hsl(0, 0%, 0%); border-radius: 12px;}
+    ::-webkit-scrollbar-thumb {background-color:#ffffff; border-radius: 12px;}
+    ::-webkit-scrollbar-thumb:hover {background: #ff0800;}
+    ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+    {
+        width:12px;height:12px;background:transparent;}
+    } 
+  </style>
+    
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="위지원의 깃블로그" src="" onerror="this.style.display='none'">
+  위지원의 깃블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">CONTACT ME</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">luigi</h1>
+  <h2 class="post-subtitle">pipeline 추가하기</h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-02-14T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Feb 14, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 6 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Pipeline">#Pipeline</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Luigi">#Luigi</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Automation">#Automation</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+      <div class="toc">
+        <a href="#">&lt;맨 위로&gt;</a>
+        <ul>
+<li><a href="#%EC%84%9C%EB%A1%A0">서론</a></li>
+<li><a href="#%EA%B0%9C%EB%85%90">개념</a></li>
+<li><a href="#%EC%84%A4%EC%B9%98">설치</a></li>
+<li><a href="#%EC%98%88%EC%A0%9C-%EC%8B%A4%ED%96%89">예제 실행</a></li>
+<li><a href="#luigi-web">luigi Web</a></li>
+<li><a href="#slack-%EC%97%B0%EA%B2%B0">Slack 연결</a></li>
+<li><a href="#%EC%A2%85%EC%86%8D%EC%84%B1-%EC%B6%94%EA%B0%80">종속성 추가</a></li>
+<li><a href="#references">REFERENCES</a></li>
+</ul>
+
+      </div>
+      <h2 id="서론">서론</h2>
+<p>혼자 짜투리 시간에 뚝딱뚝딱 뭔가를 만들어보고있는 중인데, Daily로 돌아가야 하는 코드가 있었다.
+그래서 이걸 pipeline에 실어서 돌리고자 한다.</p>
+
+<p>가장 유명한 airflow/kubeflow(그냥 내가 자주들어본)
+airflow는 내 간단한 코드를 돌리기엔 너무 무겁다. kubeflow는 kube도 어려운데.. kubeflow를…?
+그래도 airflow, kube 써보고싶다 ㅠㅠ 언제쯤 리얼서비스에서 써볼 수 있을까? 얼른 분발해야겠다!</p>
+
+<p>아무튼 “무겁다” 라고 생각하던 와중에, <a href="https://towardsdatascience.com/airflow-vs-luigi-vs-argo-vs-mlflow-vs-kubeflow-b3785dd1ed0c">이 블로그</a> 를 읽게 되었다. 해당 블로그에서는 많은 pipeline 도구들을 비교분석해주었다.
+위에 글을 읽고나니 luigi라는 새로운 도구를 알게되었다. 루이지의 주 목적은 오래 실행되는 배치 process의 처리이다.
+나와같이 airflow는 좀 무거운데 라고 생각할 때 쓰면 좋다고 해서 루이지를 써보면 어떨까 하고 생각했다. 대신, luigi는 cron을 사용해 airflow에 비해 확장성이 낮다고한다.<br> 
+어차피 내가 개발하고 있는 것도 <del>개발 맞나..?</del> 확장성이 크게 필요하지 않기떄문에 이렇게보나 저렇게 보나 일단은 루이지를 써보는게 좋을 것 같다.
+가장 좋은 교과서는 <a href="https://luigi.readthedocs.io/en/stable/">공식문서</a> 이므로, 공식 문서를 보고 따라가도록 하겠다.</p>
+
+<h2 id="개념">개념</h2>
+<p>들어가기에 앞서 루이지가 뭔지 간략하게 알아보고 들어가자. <del>슈퍼마리오 초록색</del><br>
+공식 문서에 의하면 아래와 같이 정의하고 있다.</p>
+<blockquote>
+  <p>The purpose of Luigi is to address all the plumbing typically associated with long-running batch processes.</p>
+</blockquote>
+
+<p>루이지의 워크플로우 빌드에는 Target, Task 2가지의 주 클래스가 있다.
+Target은 File, DataBase와 같은 check point를 의미한다. 그래서 LocalTarget, HdfsTarget, S3Target 같은 것들이 존재한다.
+<br>Task는 말 그대로 Task를 의미한다.</p>
+<blockquote>
+  <p>There are two fundamental building blocks of Luigi - the Task class and the Target class. Both are abstract classes and expect a few methods to be implemented. In addition to those two concepts, the Parameter class is an important concept that governs how a Task is run.</p>
+</blockquote>
+
+<p>루이지의 작동원리로는 <a href="https://medium.com/@initialkommit/batch-job-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%EC%9D%84-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A5%BC-%EC%9C%84%ED%95%9C-luigi-eaa6c399a24c">이 글</a> 에서 잘 설명해주고있다. 정말 간단하다.</p>
+<blockquote>
+  <p>Luigi는 이렇게 태스크의 요청에 기반한 실행 단위 그래프(the execution graph)를 생성하는 top-down 접근법을 갖고 있습니다. 그리고나서 top-down 방식의 처음부터 끝까지(혹은 실패할 때까지) 실행을 하게 되는거죠.</p>
+</blockquote>
+
+<p><br><br>내가 하려는 자동화는 매일 아침마다 특정 웹페이지들을 스크랩하는 것이다. 무지성으로 스크랩하진않고, 글의 날짜를 체크하여 최신 글이 있을 때만 스크랩한다.
+자 그럼 사용해보자.</p>
+<h2 id="설치">설치</h2>
+<p>우선은 pip를 이용해 간단하게 설치할 수 있다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pip install luigi 
+</code></pre></div></div>
+
+<h2 id="예제-실행">예제 실행</h2>
+<p>우선 예제를 하나 돌려보도록하자. 공식 문서에 나와있는 예제 코드를 보면<br>
+output, requires, run으로 이루어져있는 것을 알 수 있다. 입/출력 데이터와 실제 작업이 실행되는 부분으로 나뉘어진 것이다. 간단하다.<br>
+이 코드는 전체 코드의 일부이기때문에 <a href="https://github.com/spotify/luigi/blob/master/examples/top_artists.py">깃 허브 예제</a> 로 가서 확인하는 것이 좋다.<br>
+또한,, 애초에 돌아가지도 않는다. 깃허브로 바로 가는 것을 추천한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AggregateArtists</span><span class="p">(</span><span class="n">luigi</span><span class="p">.</span><span class="n">Task</span><span class="p">):</span>
+    <span class="n">date_interval</span> <span class="o">=</span> <span class="n">luigi</span><span class="p">.</span><span class="n">DateIntervalParameter</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">luigi</span><span class="p">.</span><span class="n">LocalTarget</span><span class="p">(</span><span class="s">"data/artist_streams_%s.tsv"</span> <span class="o">%</span> <span class="bp">self</span><span class="p">.</span><span class="n">date_interval</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">requires</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Streams</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">date_interval</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">artist_count</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="nb">input</span><span class="p">():</span>
+            <span class="k">with</span> <span class="nb">input</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">in_file</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">in_file</span><span class="p">:</span>
+                    <span class="n">timestamp</span><span class="p">,</span> <span class="n">artist</span><span class="p">,</span> <span class="n">track</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">strip</span><span class="p">().</span><span class="n">split</span><span class="p">()</span>
+                    <span class="n">artist_count</span><span class="p">[</span><span class="n">artist</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="p">.</span><span class="n">output</span><span class="p">().</span><span class="nb">open</span><span class="p">(</span><span class="s">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">artist</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">artist_count</span><span class="p">.</span><span class="n">iteritems</span><span class="p">():</span>
+                <span class="k">print</span> <span class="o">&gt;&gt;</span> <span class="n">out_file</span><span class="p">,</span> <span class="n">artist</span><span class="p">,</span> <span class="n">count</span>
+</code></pre></div></div>
+
+<p><br>python path를 꼭 등록해줘야 한다. 아래 명령어를 이용해 실행해 볼 수 있는데, local-scheduler이기때문에 테스트용으로만 쓰는 것이 좋다. 예시가 10년전 예시라니..환경변수는 OS에 따라 적절하게 적용해주면 된다.</p>
+<blockquote>
+  <p>Note that top_artists needs to be in your PYTHONPATH, or else this can produce an error (ImportError: No module named top_artists). Add the current working directory to the command PYTHONPATH with:</p>
+  <div class="language-python highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><span class="err">$</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="s">'.'</span> <span class="n">luigi</span> <span class="o">--</span><span class="n">module</span> <span class="n">top_artists</span> <span class="n">AggregateArtists</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">scheduler</span> <span class="o">--</span><span class="n">date</span><span class="o">-</span><span class="n">interval</span> <span class="mi">2012</span><span class="o">-</span><span class="mi">06</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<p>실행하고나면 아래와 같이 요약해서 보여준다.</p>
+<pre><code class="language-log">===== Luigi Execution Summary =====
+
+Scheduled 29 tasks of which:
+* 28 complete ones were encountered:
+    - 28 Streams(date=2022-02-01...2022-02-28)
+* 1 ran successfully:
+    - 1 AggregateArtists(date_interval=2022-02)
+
+This progress looks :) because there were no failed tasks or missing dependencies
+
+===== Luigi Execution Summary =====
+</code></pre>
+<p>굉장히 사용법이 간단한 것 같다.</p>
+
+<h2 id="luigi-web">luigi Web</h2>
+<p>루이지 웹은 굉장히 실행이 간단하다. 웹페이지를 실행한 뒤 우리가 아까 위에서 실행한 명령어를 ‘–local-scheduler’ 만 제거한 뒤 진행하면 된다.
+그럼 아래와 같이 뜬다 :)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>luigid --port 8082
+</code></pre></div></div>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/153813851-7afec3c3-5bc4-42bb-9c03-f3342ae41d87.PNG" alt="2022-02-14-luigi-img-1"></p>
+
+<h2 id="slack-연결">Slack 연결</h2>
+<p>이번 프로젝트는 기본적으로 TB급 데이터들이었기때문에 처리하는데 10시간 이상이 걸리는 경우가 다반사였다. 그래서 중간에 파이프라인이 뻑났는데도 모르고 헤헤호호 하면 그 후에 위지원이 고통받았다. 그리하여 슬랙을 alert로 이용하였다.
+아주 유용했다. <br>
+검색하다가 그나마 최신인 <a href="https://pypi.org/project/fluigi-monitor/">flugi-monitor</a> 을 발견했다. 사용법은 <a href="https://github.com/Foristkirito/luigi-monitor">깃헙 주소</a> 에서 확인 할 수 있다.
+해당 라이브러리를 사용하면 아래와 같이 사용이 가능하다고 한다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/153814424-68e189ec-706e-42fc-a9ae-cf1b5ce1cce2.PNG" alt="2022-02-14-luigi-img-2">
+<br>위 예제를 기반으로 아래와 같이 코드를 작성했다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">monitor</span><span class="p">(</span><span class="n">slack_url</span><span class="o">=&lt;</span><span class="n">Slack</span> <span class="n">API</span> <span class="n">WebHook</span> <span class="n">URL</span><span class="o">&gt;</span><span class="p">):</span>
+        <span class="n">luigi</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">main_task_cls</span><span class="o">=</span><span class="n">AggregateArtists</span><span class="p">,</span> <span class="n">cmdline_args</span><span class="o">=</span><span class="p">[</span><span class="s">"--date-interval=2022-01"</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p><br>실행해본 결과 아래와 같이 잘 되는 것을 알 수 있다 야호!<br>
+<img src="https://user-images.githubusercontent.com/33684393/153814428-20e49125-0af6-4187-8b68-d876597801f2.PNG" alt="2022-02-14-luigi-img-3"></p>
+
+<h2 id="종속성-추가">종속성 추가</h2>
+<p>아래 함수를 이용하면 종속성을 추가할 수 있다. 그래서 1번 Task가 완료되어야 2번 Task가 진행된다.<br>
+이 때, 1번 Task의 output 함수의 결괏값이 자동으로 2번 Task의 input값이 된다 :) 이걸 나중에 알아서 대체 self.input()이 어디서 온다는 거야!!! 했더랬다..ㅎㅎ;;</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">requires</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</code></pre></div></div>
+<p><br></p>
+
+<p>내 코드에 종속성을 추가한 뒤 코드를 실행했을 때 다음과 같은 에러가 발생했다. <a href="https://stackoverflow.com/questions/43107177/luigi-unfulfilled-s-at-run-time">이 글</a> 에 의하면</p>
+<blockquote>
+  <p>RuntimeError: Unfulfilled dependency at run time: collect_kakao_data__99914b932b</p>
+</blockquote>
+
+<h2 id="references">REFERENCES</h2>
+<ul>
+  <li><a href="https://www.digitalocean.com/community/tutorials/how-to-build-a-data-processing-pipeline-using-luigi-in-python-on-ubuntu-20-04">How To Build a Data Processing Pipeline Using Luigi in Python on Ubuntu 20.04</a></li>
+  <li>
+<a href="https://medium.com/@initialkommit/batch-job-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8%EC%9D%84-%EB%A7%8C%EB%93%A4%EA%B3%A0-%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A5%BC-%EC%9C%84%ED%95%9C-luigi-eaa6c399a24c">[번역] Batch Job 파이프라인을 만들고 모니터를 위한 Luigi</a> <br>
+</li>
+  <li><a href="https://seokdev.site/267">Python: luigi 배치 job 파이프라인 생성기</a></li>
+  <li><a href="https://towardsdatascience.com/data-pipelines-luigi-airflow-everything-you-need-to-know-18dc741449b7">Data pipelines, Luigi, Airflow: everything you need to know</a></li>
+</ul>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/data-pipeline/2022/01/19/kube.html" title="kubernetes의 기초">kubernetes의 기초</a><a class="next" href="/jekyll-theme-yat/data-processing/2022/03/14/Obejct-Detection.html" title="Object Detection Stage">Object Detection Stage</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/data-pipeline/2022/02/14/luigi.html" title="Object Detection Stage">luigi</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data-processing/2022/03/14/Obejct-Detection.html" title="Object Detection Stage">Object Detection Stage</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/machine-learning/2022/03/21/Object-tracking.html" title="Object Detection Stage">Object tracking</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/machine-learning/2022/03/16/YOLO-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0.html" title="Object Detection Stage">YOLO(You Only Look Once) v5 사용해보기</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  function getTOCNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var tocNodes = nodes.filter(function(elem) {
+        return elem.tagName == "A";
+    });
+    return tocNodes;
+  }
+  function getHeaderNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var headerNodes = nodes.filter(function(elem) {
+        return elem.tagName == "H1" || elem.tagName == "H2" || elem.tagName == "H3" || elem.tagName == "H4" || elem.tagName == "H5" || elem.tagName == "H6";
+    });
+    return headerNodes;
+  }
+
+  var title = document.getElementsByClassName("post-title")[0];
+  var titleY = window.pageYOffset + title.getBoundingClientRect().top;
+  
+  var article = document.getElementsByClassName("post-article")[0];
+  var articleY = window.pageYOffset + article.getBoundingClientRect().top;
+
+  var toc = document.getElementsByClassName("toc")[0];
+
+  var headerNodes = getHeaderNodes(article);
+  var tocNodes = getTOCNodes(toc);
+
+  var before = undefined;
+
+  document.addEventListener('scroll', function(e) {
+    if (window.scrollY >= articleY-60) {
+      toc.style.cssText = "position: fixed; top: 60px;";
+    }
+    else {
+      toc.style.cssText = "";
+    }
+
+    var current = headerNodes.filter(function(header) {
+      var headerY = window.pageYOffset + header.getBoundingClientRect().top;
+      return window.scrollY >= headerY - 60;
+    });
+
+    if (current.length > 0) {
+      current = current[current.length-1];
+
+      var currentA = tocNodes.filter(function(tocNode) {
+        return tocNode.innerHTML == current.innerHTML;
+      })
+      
+      currentA = currentA[0];
+      if (currentA) {
+        if (before == undefined) before = currentA;
+
+        if (before != currentA) {
+          before.classList.remove("toc-active");
+          before = currentA;
+        }
+
+        currentA.classList.add("toc-active");
+      }
+      else {
+        if (before) 
+          before.classList.remove("toc-active");
+      }
+    }
+    else {
+      if (before) 
+          before.classList.remove("toc-active");
+    }
+
+  }, false);
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Unpublished Work <span class="copyleft">©</span> 2017-2022 weejw</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/jekyll-theme-yat/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

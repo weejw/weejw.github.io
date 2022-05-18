@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/jekyll-theme-yat/feed.xml" rel="self" type="application/atom+xml" /><link href="/jekyll-theme-yat/" rel="alternate" type="text/html" /><updated>2022-05-18T04:36:45+00:00</updated><id>/jekyll-theme-yat/feed.xml</id><title type="html">위지원의 깃블로그</title><subtitle>
+위지원의 깃블로그 나는 아테네에서 가장 똑똑한 사람임에 틀림없다. 왜냐하면 나는 내가 아무것도 모른다는 사실을 알기때문이다. -소크라테스</subtitle><author><name>weejw</name></author><entry><title type="html">Bbox 라벨링에 대해서</title><link href="/jekyll-theme-yat/object-detection/2022/05/17/WSL.html" rel="alternate" type="text/html" title="Bbox 라벨링에 대해서" /><published>2022-05-17T00:00:00+00:00</published><updated>2022-05-17T00:00:00+00:00</updated><id>/jekyll-theme-yat/object-detection/2022/05/17/WSL</id><content type="html" xml:base="/jekyll-theme-yat/object-detection/2022/05/17/WSL.html"><![CDATA[<p>요근래, 모델 학습 때문에 꽤나 혼잡시러웠다. Detection rate가 너무 낮았다. 겹쳐져있는 물체들은 전혀 detect가 되지 않았다. 무엇이 문제일까? 라고 생각을 하고 찾아보다 결국 선임님께 질문을 드렸다. <br />
+나는 Bbox 라벨링을 잘못 하고 있었다.</p>
+<ul>
+  <li>겹쳐있는 물체는 라벨링하지 않음</li>
+  <li>화면 밖으로 반즘 잘려나간 물체에 대해서는 라벨링하지않음</li>
+</ul>
+
+<p>알게 된 사실</p>
+<ul>
+  <li>겹쳐있는 물체여도 겹치는 경우가 많은 경우에는 Bbox를 겹치게 쳐야했다.</li>
+  <li>밖으로 나간 물체여도 10% 이상이 보인다면 Bbox를 치는 것이 좋다.</li>
+</ul>
+
+<p>그 결과 아래와 같이 겹쳐진 경우에는 전혀 탐지되지 않은 객체들이 잘 검출된다. <br /></p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/166204531-dadad4a2-708c-461e-a3ca-86ad6ab6278d.png" alt="image" />
+<img src="https://user-images.githubusercontent.com/33684393/166204611-d43abb19-944e-4908-ad8d-bf7512dfe51e.png" alt="image" /></p>]]></content><author><name>weejw</name></author><category term="Object-Detection" /><category term="Object Detection" /><category term="Labeling" /><summary type="html"><![CDATA[요근래, 모델 학습 때문에 꽤나 혼잡시러웠다. Detection rate가 너무 낮았다. 겹쳐져있는 물체들은 전혀 detect가 되지 않았다. 무엇이 문제일까? 라고 생각을 하고 찾아보다 결국 선임님께 질문을 드렸다. 나는 Bbox 라벨링을 잘못 하고 있었다. 겹쳐있는 물체는 라벨링하지 않음 화면 밖으로 반즘 잘려나간 물체에 대해서는 라벨링하지않음]]></summary></entry><entry><title type="html">WSL2이란?</title><link href="/jekyll-theme-yat/wsl2/2022/04/20/WSL.html" rel="alternate" type="text/html" title="WSL2이란?" /><published>2022-04-20T00:00:00+00:00</published><updated>2022-04-20T00:00:00+00:00</updated><id>/jekyll-theme-yat/wsl2/2022/04/20/WSL</id><content type="html" xml:base="/jekyll-theme-yat/wsl2/2022/04/20/WSL.html"><![CDATA[<p>2020년 5월 윈도우의 업데이트로 윈도우에서 리눅스를 사용할 수 있게 해주는 WSL2 버전이 정식으로 릴리즈되었다. <br /></p>
+
+<p>WSL(Windows Subsystem for Linux 2) 는 윈도우의 가상화 기능을 활용해서 윈도우 시스템과 통합되어 윈도우 내에서 리눅스 사용이 가능하다. 
+Docker Desktop을 사용할 수 있는 것도 이때문이라고 한다.</p>
+
+<p>설치 방법은 간단하다.</p>
+
+<ol>
+  <li>관리자 모드로 Powersell 실행</li>
+  <li>DISM 명령어를 이용하여 Microsoft-Windows-Subsystem-Linux 기능 활성화
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+</code></pre></div>    </div>
+  </li>
+  <li>가상머신 활성화
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<ul>
+  <li>dism.exe ?
+DISM(Deployment Image Service and Management) 도구는 윈도우 7[4] 및 윈도우 서버 2008 R2[4]에 도입된 도구의 하나로, 윈도우 설치 이미지에 서비스 작업을 수행할 수 있고, WIM 파일이나 폴더 내에 온라인(사용자가 실행 중) 이미지나 오프라인 이미지로 변경이 가능하다. 기능에는 이미지 마운트/언마운트, 오프라인 이미지에 설치된 장치 드라이버 조회, 장치 드라이버를 오프라인 이미지에 추가가 포함된다.[4][5][6] 현재 윈도우 설치 CD나 윈도우 업데이트를 사용하는 어떠한 이미지라도 DISM을 이용하면 복구가 가능하다.[출처: 위키]</li>
+</ul>
+
+<p><a href="https://docs.microsoft.com/ko-kr/windows/wsl/install#step-4---download-the-linux-kernel-update-package">Microsoft 공식 홈페이지</a> 를 참고해서 WSL을 설치한다.</p>
+
+<ol>
+  <li>마이크로소프트 스토어에서 리눅스 설치해서 사용</li>
+  <li>또는 터미널에서 탭을 추가할 때 우분투를 사용(탭에보면 아래화살표가 있는데, 이를 클릭하면 우분투 등이 뜬다.)</li>
+</ol>
+
+<h3 id="references">References</h3>
+<p><a href="https://www.lainyzine.com/ko/article/how-to-install-wsl2-and-use-linux-on-windows-10/">https://www.lainyzine.com/ko/article/how-to-install-wsl2-and-use-linux-on-windows-10/</a></p>]]></content><author><name>weejw</name></author><category term="WSL2" /><category term="WSL" /><summary type="html"><![CDATA[2020년 5월 윈도우의 업데이트로 윈도우에서 리눅스를 사용할 수 있게 해주는 WSL2 버전이 정식으로 릴리즈되었다.]]></summary></entry><entry><title type="html">JavaScript 기본만 빠르게 살펴보기</title><link href="/jekyll-theme-yat/javascript/2022/04/19/javascript.html" rel="alternate" type="text/html" title="JavaScript 기본만 빠르게 살펴보기" /><published>2022-04-19T00:00:00+00:00</published><updated>2022-04-19T00:00:00+00:00</updated><id>/jekyll-theme-yat/javascript/2022/04/19/javascript</id><content type="html" xml:base="/jekyll-theme-yat/javascript/2022/04/19/javascript.html"><![CDATA[<p>토이 프로젝트를 위해서 JS를 새로 공부하기로 했다. <a href="https://nomadcoders.co/javascript-for-beginners">니꼴라스 쌤의 강의</a> 를 듣고 나에게 필요한 것들만 메모하여 다시 열어보기 위한 글이다. <br /></p>
+
+<ul>
+  <li>니꼴라스쌤이 생각하는 element를 가져오는 가장 멋진 방법 
+css 방식으로 element 찾는 것이 가능하다. <br /></li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1">// class name이 hello이고 element가 h1일 때</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">.hello h1</span><span class="dl">"</span><span class="p">)</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">"</span><span class="s2">.hello h1</span><span class="dl">"</span><span class="p">)</span>
+
+<span class="c1">// id의 경우</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="dl">"</span><span class="s2">#hello</span><span class="dl">"</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>이벤트 처리 방법
+아래 코드처럼 element를 가져오고 해당 element에 event를 추가할 수 있다. <br /></li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kd">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">div.hello:first-child h1</span><span class="dl">"</span><span class="p">)</span>
+
+<span class="kd">function</span> <span class="nx">handleTitleClick</span><span class="p">(){</span>
+    <span class="nx">title</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="o">=</span><span class="dl">"</span><span class="s2">blue</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">handleMouseEnter</span><span class="p">(){</span>
+    <span class="nx">title</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Mouse is here!</span><span class="dl">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">handleMouseLeave</span><span class="p">(){</span>
+    <span class="nx">title</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Mouse is gone!</span><span class="dl">"</span>
+<span class="p">}</span>
+
+<span class="nx">title</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleTitleClick</span><span class="p">)</span>
+<span class="c1">// 아래처럼 사용도 가능</span>
+<span class="nx">title</span><span class="p">.</span><span class="nx">onclick</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleTitleClick</span><span class="p">())</span>
+<span class="nx">title</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">mouseenter</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleMouseEnter</span><span class="p">)</span>
+<span class="nx">title</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">mouseleave</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleMouseLeave</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<ul>
+  <li>윈도우에 함수 추가하기</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">resize</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleWindowResize</span><span class="p">)</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">copy</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handlewindowCopy</span><span class="p">)</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">offline</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleWindowOffline</span><span class="p">)</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">online</span><span class="dl">"</span><span class="p">,</span> <span class="nx">handleWindowOnline</span><span class="p">)</span>
+
+</code></pre></div></div>]]></content><author><name>weejw</name></author><category term="JavaScript" /><category term="JavaScript" /><summary type="html"><![CDATA[토이 프로젝트를 위해서 JS를 새로 공부하기로 했다. 니꼴라스 쌤의 강의 를 듣고 나에게 필요한 것들만 메모하여 다시 열어보기 위한 글이다.]]></summary></entry><entry><title type="html">FastAPI</title><link href="/jekyll-theme-yat/api/2022/04/18/fast-api.html" rel="alternate" type="text/html" title="FastAPI" /><published>2022-04-18T00:00:00+00:00</published><updated>2022-04-18T00:00:00+00:00</updated><id>/jekyll-theme-yat/api/2022/04/18/fast-api</id><content type="html" xml:base="/jekyll-theme-yat/api/2022/04/18/fast-api.html"><![CDATA[<blockquote>
+  <p>FastAPI는 현대적이고, 빠르며(고성능), 파이썬 표준 타입 힌트에 기초한 Python3.6+의 API를 빌드하기 위한 웹 프레임워크입니다. [공식 문서 발췌]</p>
+</blockquote>
+
+<p>FastAPI는 <a href="https://fastapi.tiangolo.com/ko/">공식 문서</a> 가 잘되어있기때문에 이를 참조하면 좋다. 
+요근래 일이 좀 많아서 오늘은 간단하게 Fast API 설치하고 웹띄우는 부분만 해보려한다.<br /></p>
+
+<h2 id="설치">설치</h2>
+
+<p>uvicorn 은 서버 역할을 한다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip insatll fastapi[all]
+<span class="nv">$ </span>pip <span class="nb">install </span>uvicorn
+</code></pre></div></div>
+
+<p>가장 기본적인 코드를 작성한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+
+<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">root</span><span class="p">():</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">"message"</span><span class="p">:</span> <span class="s">"Hello World"</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>아래 명령어로 서버를 실행하고 localhost:8000으로 가면 helloworld가 뜨는 것을 확인할 수 있다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>uvicorn main:app <span class="nt">--reload</span>
+</code></pre></div></div>
+
+<p>FastAPI는 Swagger를 제공한다. 경로는 각각 <span class="evidence">/docs</span> 와 <span class="evidence">/redoc</span> <br />
+<a href="https://mumin-blog.tistory.com/337">이 블로그</a> 를 참고해서 코드를 작성해보자.</p>
+
+<p>잘 작동된다.. 정말 감격스럽다;; Flask로 했을 때는 따로 설정을 해줬어야 했는데 이렇게 단 몇줄로 완성이되다니.. <br />
+<img src="https://user-images.githubusercontent.com/33684393/163770737-c1ced832-c376-45e3-bee3-97d32b4691c3.png" alt="image" /></p>]]></content><author><name>weejw</name></author><category term="API" /><category term="API" /><category term="Python" /><category term="FastAPI" /><summary type="html"><![CDATA[FastAPI는 현대적이고, 빠르며(고성능), 파이썬 표준 타입 힌트에 기초한 Python3.6+의 API를 빌드하기 위한 웹 프레임워크입니다. [공식 문서 발췌]]]></summary></entry><entry><title type="html">Data Augmentation</title><link href="/jekyll-theme-yat/data/2022/04/12/data-argumentation.html" rel="alternate" type="text/html" title="Data Augmentation" /><published>2022-04-12T00:00:00+00:00</published><updated>2022-04-12T00:00:00+00:00</updated><id>/jekyll-theme-yat/data/2022/04/12/data-argumentation</id><content type="html" xml:base="/jekyll-theme-yat/data/2022/04/12/data-argumentation.html"><![CDATA[<h2 id="data-augmentation">Data Augmentation</h2>
+
+<p>‘augment’: 증강시키다. 즉, 하나의 데이터셋을 여러가지 방법으로 증강시켜 데이터셋의 규모를 키우는 방식이다. 
+종류는 Mirroring, Random Cropping, Rotation, Shearing 등이 있다. 딥러닝의 고질적인 문제 중 하나인 오버피팅을 해결하기 위해서
+학습 면적을 너무 과하지않게 변화시키기 위해 사용한다. <a href="https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&amp;blogId=4u_olion&amp;logNo=221437862590">출처</a></p>
+
+<p>이미지에 인위적으로 노이즈를 주어 학습 폭을 넓히는 것인데, 과하게 주면 좋지않다고 한다. <a href="https://hoya012.github.io/blog/Image-Data-Augmentation-Overview/">이 글</a> 에서 다양한 augmentaion의 종류를 예제와 함께 볼 수있다. <br /></p>
+
+<p>Augmentation의 기법은 개가 있다.</p>
+<ul>
+  <li>Pixel-Level: 픽셀 단위로 변환을 시킨다. blur, <a href="https://nrhan.tistory.com/entry/Data-augmentation-color-jitter">jitter</a>, noise</li>
+  <li>Spatial-Level: 이미지 자체를 변환시킨다. flip, roation</li>
+</ul>]]></content><author><name>weejw</name></author><category term="Data" /><category term="Data" /><category term="Computer Vision" /><category term="pre-prosessing" /><summary type="html"><![CDATA[Data Augmentation]]></summary></entry><entry><title type="html">Data 처리에 관련된 모든 용어</title><link href="/jekyll-theme-yat/data/2022/04/11/data-study.html" rel="alternate" type="text/html" title="Data 처리에 관련된 모든 용어" /><published>2022-04-11T00:00:00+00:00</published><updated>2022-04-11T00:00:00+00:00</updated><id>/jekyll-theme-yat/data/2022/04/11/data-study</id><content type="html" xml:base="/jekyll-theme-yat/data/2022/04/11/data-study.html"><![CDATA[<h3 id="bibusiness-intelligence">BI(Business Intelligence)</h3>
+<p>데이터 통합/분석해 기업 활동에 연관된 의사결정을 돕는 프로세스</p>
+
+<h3 id="dldata-lake">DL(Data Lake)</h3>
+<p>다양한 원천을 그대로 가져와 저장하여 다양성을 보존함</p>
+
+<h3 id="data-mesh">Data Mesh</h3>
+<p>DL, DW에서 중앙 집중형 데이터 관리의 문제점으로 인해 생긴 분석 시스템 아키텍쳐로 Monolithic 구조를 가지고 있다.
+Monolithic 구조는 분석 플랫폼이 모든 도메인에 대해 단일 시스템과 단일 분석팀을 사용한다.
+즉, 업무별로 시스템과 팀을 분리하는 구조이다. Data as-a-product 개념을 도입하였다.</p>
+
+<h3 id="data-book">Data book</h3>
+<p>데이터 정의서라고 하며 코딩 작업을 할 때의 안내서같은 역할을 한다.</p>
+
+<h3 id="dwdata-warehouse">DW(Data Warehouse)</h3>
+<p>사용자 의사결정에 도움주기위한 데이터 베이스 집합
+ㅠ</p>
+<h3 id="staging-로딩">Staging 로딩</h3>
+<p>source system으로부터 제공받은 데이터를 아무런 변화 없이 그대로 로딩하는 저장 공간, 임시 저장공간 성격</p>
+
+<h3 id="edwenterprise-data-warehouse">EDW(Enterprise Data Warehouse)</h3>
+<p>여러 애플리케이션의 비즈니스 정보를 중앙 집중화하고 조직 전체에서 분석/사용할 수 있도록 하는 DB. 데이터 표준화, 유연성, BI 도구에대한 연결성의 이점을 가질 수 있음</p>
+
+<h3 id="adwanalytical-data-warehouse">ADW(Analytical Data Warehouse)</h3>
+<p>전사 관점의 통합 분석 자료를 제공</p>
+
+<h3 id="rdwreal-time-data-warehouse">RDW(Real-time Data Warehouse)</h3>
+<p>원천 데이터 실시간 처리로 실시간 비즈니스 활용 기반을 구축</p>
+
+<h3 id="dmdata-mart">DM(Data Mart)</h3>
+<p>특정 주제를 중심으로 구축된 소규모 DW</p>
+
+<h3 id="dw와-dm을-나눈-이유는">DW와 DM을 나눈 이유는?</h3>
+<p>DM와 DW의 차이는 DW는 특정 주제를 가지고 운영된다는 것으로 DM의 필요 이유는 DW로 수많은 유저가 접근할 시 큰 부하가 생기고 원천을 크게 가공하지 않은 상태인 DW가 좋은 정보를 제공하지 못할 가능성이 있기때문이다. 쉽게 생각하면 물류창고에서 마트로 물건을 옮겼다고 생각하면 됨</p>
+
+<h3 id="oltpon-line-transaction-processing">OLTP(On-Line Transaction Processing)</h3>
+<p>기업 운영에 필요한 비즈니스 프로세스를 자동화한 시스템, 은행 창구 업무 등, 이 때 시스템으로부터 데이터를 추출,수정,요약해서 의사결정을 지원할 수 있는 DB가 DW</p>
+
+<h3 id="olap">OLAP()</h3>
+<p>OLTP를 활용하여 데이터를 분석하고 이를 활용하는 방법</p>
+
+<h3 id="etlextraction-trasformation-loading">ETL(Extraction, Trasformation, Loading)</h3>
+<p>원천 데이터로부터 데이터를 추출 및 변환하여 적재하는 구성 요소, Batch작업으로 정형 데이터 통합</p>
+
+<h3 id="cdcchange-data-capture">CDC(Change Data Capture)</h3>
+<p>real time으로 원천 데이터를 처리함, 로그나 통신을 통한 변경이 이루어짐</p>
+<ul>
+  <li>source DB에서 target DB로 실시간 복제를 진행하는 방식으로 진행됨</li>
+  <li>source DB에 영향을 거의 주지말아야하며, source DB의 데이터가 변경된 부분만 읽어서 정합성 유지</li>
+</ul>
+
+<h3 id="odsoperational-data-store">ODS(Operational Data Store)</h3>
+<p>DW로 데이터를 저장하기 전에 임시로 운영 데이터를 보관하는 장소로 이력 데이터(스냅샷 데이터)를 저장함</p>
+
+<h3 id="dw-구축-순서">DW 구축 순서</h3>
+<ol>
+  <li>DW modeling</li>
+  <li>ETL (Leagcy -&gt; DW)</li>
+  <li>Data Mart Modeling</li>
+  <li>ETL (ODS/DW -&gt; DM)</li>
+  <li>ROLAP (DW에서 ROLAP)</li>
+  <li>MOLAP (DM에서 MOLAP)</li>
+  <li>DW 시스템 운영</li>
+</ol>
+
+<h3 id="dw-구축-방법">DW 구축 방법</h3>
+<ul>
+  <li>Top-Down: 전사 관점에서 한번에 구축, 시간/비용/전사적 지원 필요</li>
+  <li>Bottom-Down: 각 부서별로 mart 먼저 구축하고 이후 통합이라 통합에 대한 설계 고려해야함</li>
+  <li>Hybrid: DW와 DM을 병합으로 구축 비용/인력 분산 투입가능하며 위험을 최소화 시킬 수 있음</li>
+</ul>
+
+<h3 id="data-처리-순서">Data 처리 순서</h3>
+
+<p>Legacy -&gt; staging -&gt; ODS -&gt; DW -&gt; DM -&gt; 필요한 곳</p>
+
+<h3 id="references">References</h3>
+<p><a href="https://ehyun0128.github.io/miscellaneous/dm_dw_dl/">https://ehyun0128.github.io/miscellaneous/dm_dw_dl/</a> <br />
+<a href="https://dbrang.tistory.com/650">https://dbrang.tistory.com/650</a> <br />
+<a href="https://velog.io/@sezzzini/%EA%B8%88%EC%9C%B5-IT-ETL-%EA%B3%BC-DW">https://velog.io/@sezzzini/%EA%B8%88%EC%9C%B5-IT-ETL-%EA%B3%BC-DW</a> <br />
+<a href="https://simroot.tistory.com/25">https://simroot.tistory.com/25</a> <br />
+<a href="https://bcho.tistory.com/1379">https://bcho.tistory.com/1379</a> <br />
+<a href="https://loghada.tistory.com/9">https://loghada.tistory.com/9</a> <br /></p>]]></content><author><name>weejw</name></author><category term="Data" /><category term="Data" /><summary type="html"><![CDATA[BI(Business Intelligence) 데이터 통합/분석해 기업 활동에 연관된 의사결정을 돕는 프로세스]]></summary></entry><entry><title type="html">TDD(Test Driven Development) (3)</title><link href="/jekyll-theme-yat/python/2022/04/08/python-TDD-3.html" rel="alternate" type="text/html" title="TDD(Test Driven Development) (3)" /><published>2022-04-08T00:00:00+00:00</published><updated>2022-04-08T00:00:00+00:00</updated><id>/jekyll-theme-yat/python/2022/04/08/python-TDD-3</id><content type="html" xml:base="/jekyll-theme-yat/python/2022/04/08/python-TDD-3.html"><![CDATA[<p>내용이 많아서 분할해서 진행해야겠다 ;(</p>
+
+<p><a href="https://testdriven.io/blog/modern-tdd/">https://testdriven.io/blog/modern-tdd/</a> 를 참고하여 공부했다. <br />
+<a href="https://weejw.github.io/python/2022/03/29/python-TDD.html">TDD(Test Driven Development) (1)</a> <br />
+<a href="https://weejw.github.io/python/2022/04/06/python-TDD-2.html">TDD(Test Driven Development) (2)</a></p>
+
+<h2 id="code-coverage">Code coverage</h2>
+
+<p>코드 커버리지는 테스트 케이스가 얼마나 충족되었는지를 나타내는 지표중 하나이다. <a href="https://tecoble.techcourse.co.kr/post/2020-10-24-code-coverage/">출처</a></p>
+
+<p>필요한 패키지를 설치해주고 실행한다.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>pytest-cov
+<span class="nv">$ </span>python <span class="nt">-m</span> pytest tests <span class="nt">--cove</span><span class="o">=</span>blog
+</code></pre></div></div>
+
+<p>본문에서 다음을 강조하고있다.</p>
+<blockquote>
+  <p>High coverage percentage is great but the quality of your tests is much more important.</p>
+</blockquote>
+
+<h2 id="end-to-end-tests">End-to-end Tests</h2>
+
+<p>e2e 테스트는 종단간 테스트로 사용자의 입장에서 테스트하는 것을 의미한다. 사용자에게 직접적으로 노출되는 부분을 점검한다고 보면된다. <a href="https://blog.hbsmith.io/e2e-test-%EC%95%8C%EC%95%84%EB%B3%B4%EA%B8%B0-3c524862469d">출처</a></p>
+
+<p>필요한 라이브러리 먼저 설치</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>requests
+</code></pre></div></div>
+<p>e2e는 end to end를 의미한다.
+pytest.ini 에 아래와 같은 내용을 추가한다. <br /></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">pytest</span><span class="p">]</span>
+<span class="n">markers</span> <span class="o">=</span>
+    <span class="n">e2e</span><span class="p">:</span> <span class="n">marks</span> <span class="n">tests</span> <span class="k">as</span> <span class="n">e2e</span> <span class="p">(</span><span class="n">deselect</span> <span class="k">with</span> <span class="s">'-m "not e2e"'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>이를 <a href="https://docs.pytest.org/en/stable/how-to/mark.html#registering-marks">markers</a>라고 한다.</p>
+
+<p>test_app.py에 보면 아래와 같이 어노테이터를 추가해준다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">e2e</span>
+</code></pre></div></div>
+
+<h2 id="testing-pyramid">Testing Pyramid</h2>
+<p>구글링으로 하면 바로 나온다. 
+위로 갈수록 slow 아래로 갈수록 fast 해야한다.
+<img src="https://user-images.githubusercontent.com/33684393/162364142-cddf7dd6-c145-4b21-9e6e-4b779f4e2104.png" alt="image" /></p>
+
+<p>가장 하단에 위치하는 Unit test는 코드의 유닛당으로 테스트하는 것이고, Integration tests는 multiple units 를 함께 테스트 그리고 마지막으론 바로 위에서 언급한 사용자 입장 테스트를 한다. <br /></p>]]></content><author><name>weejw</name></author><category term="Python" /><category term="TDD" /><category term="Python" /><category term="Development" /><summary type="html"><![CDATA[내용이 많아서 분할해서 진행해야겠다 ;(]]></summary></entry><entry><title type="html">RetinaNet</title><link href="/jekyll-theme-yat/thesis/2022/04/07/retinaNet.html" rel="alternate" type="text/html" title="RetinaNet" /><published>2022-04-07T00:00:00+00:00</published><updated>2022-04-07T00:00:00+00:00</updated><id>/jekyll-theme-yat/thesis/2022/04/07/retinaNet</id><content type="html" xml:base="/jekyll-theme-yat/thesis/2022/04/07/retinaNet.html"><![CDATA[<h2 id="retinanet이란">RetinaNet이란?</h2>
+<p>모델이 예측하기 어려운 hard example에 집중하도록 하는 focal Loss를 제안하였으며 Faster R-CNN 속도를 능가함 <br />
+ResNet-FPN을 back으로 하여 sub-network를 2개 사용한다. (obejct classfication, bounding box regression)</p>
+
+<h2 id="class-imbalance">class imbalance</h2>
+<p>Yolo같은 모델은 속도는 빠르나 정확도가 낮은데 그 이유를 객체와 배경 클래스의 불균형에서 찾았다.(foreground, background class imbalance) <br />
+two-stage model은 휴리스틱 샘플링이나 OHEM 기법으로 이러한 class imbalance를 해소한다.</p>
+<ul>
+  <li>휴리스틱 샘플: positive, negative 비율을 정해서 샘플링</li>
+  <li>OHEM: 이미지에서 추출한 모든 Rols(Region of Interest)를 forwad pass한 후 loss를 계산하여, 높은 loss를 가지는 Rols에 대해서만 backward pass를 수행하는 방법(<a href="">출처</a>)
+    <ul>
+      <li>forward pass: 입력값을 받아서 loss값을 구하기까지 계산해가는 과정</li>
+      <li>backward pass: forward pass가 끝 난 이후 역미분을 통해 기울기 값을 구해가는 과정</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="focal-loss">Focal Loss</h2>
+<p>loss function을 수정해서 예측하기 쉬운 easy example에는 0에 가까운 loss를 부여하고 예측이 어려운 negative example에는 기존보다 높은 loss를 부여함 (scale factor)
+즉, easy example의 영향을 낮추고 hard example의 영향을 높이는 것이 목표다.
+아래가 focal loss 함수이다. <br />
+<img src="https://user-images.githubusercontent.com/33684393/162138491-c0c74b4c-de25-4d76-830d-337bb9aa5752.png" alt="image" /></p>
+
+<p>example이 잘못 분류 된 경우 위의 pt는 낮은 값을 갖고 loss는 가중치에 영향을 받지않으며 예측하기 쉬운경우에는 pt가 큰 값을 가지게되고 loss도 0에 가까운 값을 갖는다.<br /></p>]]></content><author><name>weejw</name></author><category term="Thesis" /><category term="Computer Vision" /><category term="Thesis" /><category term="Object Detection" /><category term="Machine Learning" /><summary type="html"><![CDATA[RetinaNet이란? 모델이 예측하기 어려운 hard example에 집중하도록 하는 focal Loss를 제안하였으며 Faster R-CNN 속도를 능가함 ResNet-FPN을 back으로 하여 sub-network를 2개 사용한다. (obejct classfication, bounding box regression)]]></summary></entry><entry><title type="html">TDD(Test Driven Development) (2)</title><link href="/jekyll-theme-yat/python/2022/04/06/python-TDD-2.html" rel="alternate" type="text/html" title="TDD(Test Driven Development) (2)" /><published>2022-04-06T00:00:00+00:00</published><updated>2022-04-06T00:00:00+00:00</updated><id>/jekyll-theme-yat/python/2022/04/06/python-TDD-2</id><content type="html" xml:base="/jekyll-theme-yat/python/2022/04/06/python-TDD-2.html"><![CDATA[<p>내용이 많아서 분할해서 진행해야겠다 ;(</p>
+
+<p><a href="https://testdriven.io/blog/modern-tdd/">https://testdriven.io/blog/modern-tdd/</a> 를 참고하여 공부했다. <br />
+<a href="https://weejw.github.io/python/2022/03/29/python-TDD.html">이전 글</a> <br /></p>
+
+<p>격리는 해제되었으나, 아직도 코로나의 여파로 기침과 두통이 으… 얼른 나았으면 좋겠다 😥 <br /></p>
+
+<blockquote>
+  <p>테스트 코드를 따로 안 만들어도 된다고 주장하는 개발자는 대단히 자기 중심적이고 이기적인 사람이다 - 소프트웨어 장인</p>
+</blockquote>
+
+<p>@pytest.fixture annotate를 사용하면 test 후에 데이터베이스를 지우고 각 테스트 전에 새 데이터베이스를 생성하는 것이 가능하다. <br />
+아래 코드를 보면 중간에 yield가 있다. 본문에 의하면 이 yield 일 때 테스트가 진행된다. (아직 무슨 말인지 크게 와닿지 않는다..)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">database</span><span class="p">():</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">tempfile</span><span class="p">.</span><span class="n">mkstemp</span><span class="p">()</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">environ</span><span class="p">[</span><span class="s">"DATABASE_NAME"</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_name</span>
+    <span class="n">Article</span><span class="p">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">database_name</span><span class="o">=</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="k">yield</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">fixture</span>
+<span class="k">def</span> <span class="nf">some_fixture</span><span class="p">():</span>
+    <span class="c1"># do something before your test
+</span>    <span class="k">yield</span> <span class="c1"># test runs here
+</span>    <span class="c1"># do something after your test
+</span></code></pre></div></div>
+
+<p>윗 글만으로는 잘 이해가 안가서 좀 더 찾아보았다. <br />
+@pytest.fixture decorate 를 사용하면 fixture 선언한 함수를 테스트 함수에서 인자로 넣어 사용할 수 있다고 한다. <br /></p>
+
+<h3 id="fixture가-뭘까">Fixture가 뭘까?</h3>
+<ul>
+  <li>테스트를 자동화하거나 조절하기 위해 사용됨</li>
+  <li>테스트 시 필요한 부분 및 조건을 미리 준비한 자원 및 코드</li>
+  <li>예를 들어 10줄의 row data를 test할 때 사용한다 라고 하면 이 10줄이 fixture가 됨</li>
+  <li>위에 코드를 보면 그럼 file_name이라는 table이 fixture에 해당됨</li>
+</ul>
+
+<p><a href="https://testdriven.io/blog/modern-tdd/">본문</a>에서 test_quries.py 코드를 복사해 사용한다. <br /></p>
+
+<h2 id="flask-api">Flask API</h2>
+<p>우선 필요한 라이브러리와 Flask를 설치한다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>jsonschema Flask
+</code></pre></div></div>
+
+<p>본문에서 Article과 ArticleList json schema, test_app.py, test_app.py를 복사해 사용한다. <br />
+json schema를 따로 정의해서 사용하는 것을 알게되었다. <br /></p>
+
+<p>아래처럼 bad request에 대해서도 테스트를 진행해야한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">test_create_article_bad_request</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="s">"""
+    GIVEN request data with invalid values or missing attributes
+    WHEN endpoint /create-article/ is called
+    THEN it should return status 400
+    """</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s">"/create-article/"</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="n">data</span>
+        <span class="p">),</span>
+        <span class="n">content_type</span><span class="o">=</span><span class="s">"application/json"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
+    <span class="k">assert</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p>본문에서 보면 아래와 같이 parmetrize라는 어노테이터 가 있다. 이를 이용하면 매개변수를 사용할 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">mark</span><span class="p">.</span><span class="n">parametrize</span><span class="p">(</span>
+    <span class="s">"data"</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s">"author"</span><span class="p">:</span> <span class="s">"John Doe"</span><span class="p">,</span>
+            <span class="s">"title"</span><span class="p">:</span> <span class="s">"New Article"</span><span class="p">,</span>
+            <span class="s">"content"</span><span class="p">:</span> <span class="s">"Some extra awesome content"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">"author"</span><span class="p">:</span> <span class="s">"John Doe"</span><span class="p">,</span>
+            <span class="s">"title"</span><span class="p">:</span> <span class="s">"New Article"</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s">"author"</span><span class="p">:</span> <span class="s">"John Doe"</span><span class="p">,</span>
+            <span class="s">"title"</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">"content"</span><span class="p">:</span> <span class="s">"Some extra awesome content"</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>app.py에서도 에러 핸들러라는 어노테이터를 이용하여 핸들링이 가능하다.<br />
+기능 설계도 분명 중요하지만 이러한 에러핸들링이 개인적으로 더 중요하다고 생각된다.. 빵빵 터지는걸 너무 많이 경험해봐서..</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">errorhandler</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handle_validation_exception</span><span class="p">(</span><span class="n">error</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">error</span><span class="p">.</span><span class="n">errors</span><span class="p">())</span>
+    <span class="n">response</span><span class="p">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="k">return</span> <span class="n">response</span>
+
+</code></pre></div></div>
+
+<h2 id="references">REFERENCES</h2>
+<p><a href="https://velog.io/@sangyeon217/pytest-fixture">https://velog.io/@sangyeon217/pytest-fixture</a>
+<a href="https://twpower.github.io/19-about-python-test-fixture">https://twpower.github.io/19-about-python-test-fixture</a></p>]]></content><author><name>weejw</name></author><category term="Python" /><category term="Tdd" /><category term="Python" /><category term="Development" /><summary type="html"><![CDATA[내용이 많아서 분할해서 진행해야겠다 ;(]]></summary></entry><entry><title type="html">TDD(Test Driven Development) (1)</title><link href="/jekyll-theme-yat/python/2022/03/29/python-TDD.html" rel="alternate" type="text/html" title="TDD(Test Driven Development) (1)" /><published>2022-03-29T00:00:00+00:00</published><updated>2022-03-29T00:00:00+00:00</updated><id>/jekyll-theme-yat/python/2022/03/29/python-TDD</id><content type="html" xml:base="/jekyll-theme-yat/python/2022/03/29/python-TDD.html"><![CDATA[<p>내용이 많아서 분할해서 진행해야겠다 ;(</p>
+
+<p><a href="https://testdriven.io/blog/modern-tdd/">https://testdriven.io/blog/modern-tdd/</a> 를 참고하여 공부했다.</p>
+
+<h2 id="어떻게-테스트를-해야하는가">어떻게 테스트를 해야하는가?</h2>
+
+<ul>
+  <li>테스트는 기본적으로 아래 3가지에 대한 결과를 제공할 수 있어야한다. <br />
+    <ul>
+      <li>GIVEN</li>
+      <li>WHEN</li>
+      <li>THEN</li>
+    </ul>
+  </li>
+  <li>단일 테스트로 모든 테스트는 독립적이여야 하며 각 파이프 라인 별로 1회만 진행한다.</li>
+</ul>
+
+<h2 id="기본-사용">기본 사용</h2>
+
+<p>가장 기본적으로는 아래처럼 테스트가 가능하다. 이를 test 파일로 분할시켜보자.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sum1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="k">def</span> <span class="nf">sum0</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">sum1</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+<span class="n">sum0</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>아래처럼 디렉토리를 나누어 준다. 이후에 위에 존재하는 sum0을 test_sum.py로 이동! 그럼 분리가 된다.<br />
+<img src="https://user-images.githubusercontent.com/33684393/160510523-1f1b1f54-7d83-42b5-8a46-56b04a3ad30e.png" alt="image" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">...sum.sum</span> <span class="kn">import</span> <span class="n">sum1</span>
+
+
+<span class="k">def</span> <span class="nf">test_sum</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">sum1</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+</code></pre></div></div>
+
+<h3 id="pytest-설치">pytest 설치</h3>
+
+<p>pytest를 설치하고 tests 아래에 빈 파일 2개를 생성한다 [conftest.py, pytest.ini]</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>pytest
+</code></pre></div></div>
+
+<p>그리고 나서 다음 명령어를 입력하면 결과를 출력한다</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> pytest tests
+</code></pre></div></div>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>S C:<span class="se">\U</span>sers<span class="se">\w</span>eejw<span class="se">\P</span>ycharmProjects<span class="se">\p</span>ythonProject<span class="se">\t</span>esting_project&gt; python <span class="nt">-m</span> pytest tests
+<span class="o">================================================</span> <span class="nb">test </span>session starts <span class="o">================================================</span>
+platform win32 <span class="nt">--</span> Python 3.8.10, pytest-7.1.1, pluggy-1.0.0
+rootdir: C:<span class="se">\U</span>sers<span class="se">\w</span>eejw<span class="se">\P</span>ycharmProjects<span class="se">\p</span>ythonProject<span class="se">\t</span>esting_project<span class="se">\t</span>ests, configfile: pytest.ini
+collected 1 item                                                                                                     
+
+tests<span class="se">\t</span>est_sum<span class="se">\t</span>est_sum.py <span class="nb">.</span>                                                                                   <span class="o">[</span>100%]
+
+<span class="o">=================================================</span> 1 passed <span class="k">in </span>0.02s <span class="o">=================================================</span>
+</code></pre></div></div>
+
+<h2 id="실제-어플리케이션에서-사용하기">실제 어플리케이션에서 사용하기</h2>
+
+<p>pydantic을 설치한다. (pydantic은 타입 애너테이션을 사용해 데이터를 검증하고 설정들을 관리하는 라이브러리로 런타임 환경에서 타입을 강제하고 유효하지 않을 시에 에러 발생) <br /></p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install</span> <span class="s2">"pydantic[email]"</span>
+</code></pre></div></div>
+
+<p>파일 구조는 아래와 같다. <br /></p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/160511441-4e235593-6a29-461c-b567-38db2f3172af.png" alt="image" />
+<a href="https://wookkl.tistory.com/62">https://wookkl.tistory.com/62</a> <br /></p>
+
+<p><a href="https://testdriven.io/blog/modern-tdd/">참고 블로그</a> 에서 코드를 복사하여 models.py에 붙여준다.</p>
+
+<p>아래는 코드의 일부이다. 코드를 보면 알 수 있듯이 pydantic을 이용하여 타입을 체크할 수 있도록 되어있다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">EmailStr</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="k">class</span> <span class="nc">Article</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="p">.</span><span class="n">uuid4</span><span class="p">()))</span>
+    <span class="n">author</span><span class="p">:</span> <span class="n">EmailStr</span>
+</code></pre></div></div>
+
+<p>tests 폴더 아래에 다음과같이 test_article이라는 폴더와 test_commands를 추가한다. 그리고 <a href="https://testdriven.io/blog/modern-tdd/">참고 블로그</a> 에서 코드를 복사하여
+test_commands.py와 commands.py에 붙여넣는다 :)<br />
+<img src="https://user-images.githubusercontent.com/33684393/160511827-6cc7b9eb-c0c9-4783-90a5-3a45f36845e1.png" alt="image" /></p>
+
+<p>test_commands.py에는 2가지 test가 존재한다.
+test create artilce에서는 assert로 체크하고, already exsists에서는 pytest로 체크하였다. 이후 동일하게 “python -m pytest tests” 로 테스트를 진행할 수 있다.</p>
+<blockquote>
+  <p>def test_create_article()</p>
+
+  <p>def test_create_article_already_exists()</p>
+</blockquote>
+
+<p>아래는 conftest.py의 일부 코드이다. 보면 autouse=True 라는 부분이 있다. 이를 본문에서는 아래와 같이 설명하고 있다.</p>
+<blockquote>
+  <p>The autouse flag is set to True so that it’s automatically used by default before (and after) each test in the test suite. Since we’re using a database for all tests it makes sense to use this flag. That way you don’t have to explicitly add the fixture name to every test as a parameter.</p>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">pytest</span><span class="p">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">database</span><span class="p">():</span>
+</code></pre></div>  </div>
+</blockquote>
+
+<h2 id="references">REFERENCES</h2>
+<p><a href="https://ichi.pro/ko/pydantic-choboja-gaideu-204731199577737">https://ichi.pro/ko/pydantic-choboja-gaideu-204731199577737</a> <br /></p>]]></content><author><name>weejw</name></author><category term="Python" /><category term="TDD" /><category term="Python" /><category term="Development" /><summary type="html"><![CDATA[내용이 많아서 분할해서 진행해야겠다 ;(]]></summary></entry></feed>

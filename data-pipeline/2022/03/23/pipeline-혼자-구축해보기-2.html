@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>ELK + beats 시작하기 2 | 위지원의 깃블로그</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="ELK + beats 시작하기 2">
+<meta name="author" content="weejw">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="이전 글: ELK + beats 시작하기">
+<meta property="og:description" content="이전 글: ELK + beats 시작하기">
+<link rel="canonical" href="/jekyll-theme-yat/data-pipeline/2022/03/23/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0-2.html">
+<meta property="og:url" content="/jekyll-theme-yat/data-pipeline/2022/03/23/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0-2.html">
+<meta property="og:site_name" content="위지원의 깃블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-03-23T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="ELK + beats 시작하기 2">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"weejw"},"dateModified":"2022-03-23T00:00:00+00:00","datePublished":"2022-03-23T00:00:00+00:00","description":"이전 글: ELK + beats 시작하기","headline":"ELK + beats 시작하기 2","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/data-pipeline/2022/03/23/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0-2.html"},"url":"/jekyll-theme-yat/data-pipeline/2022/03/23/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0-2.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="위지원의 깃블로그">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+  <style> 
+    ::-webkit-scrollbar{width: 10px;}
+    ::-webkit-scrollbar-track {background-color:hsl(0, 0%, 0%); border-radius: 12px;}
+    ::-webkit-scrollbar-thumb {background-color:#ffffff; border-radius: 12px;}
+    ::-webkit-scrollbar-thumb:hover {background: #ff0800;}
+    ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+    {
+        width:12px;height:12px;background:transparent;}
+    } 
+  </style>
+    
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="위지원의 깃블로그" src="" onerror="this.style.display='none'">
+  위지원의 깃블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">CONTACT ME</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">ELK + beats 시작하기 2</h1>
+  <h2 class="post-subtitle">ELK를 이용해 beats 데이터를 모아보자</h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-03-23T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Mar 23, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 1 min</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Data%20Pipeline">#Data Pipeline</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#ELK">#ELK</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Elasticsearch">#Elasticsearch</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Beats">#Beats</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+      <div class="toc">
+        <a href="#">&lt;맨 위로&gt;</a>
+        <ul>
+<li><a href="#%EC%96%B4%EB%96%BB%EA%B2%8C-%EA%B5%AC%EC%84%B1%ED%95%A0-%EA%B2%83%EC%9D%B8%EA%B0%80">어떻게 구성할 것인가?</a></li>
+<li>
+<a href="#elk-cluster-%EC%83%9D%EC%84%B1">ELK Cluster 생성</a><ul><li><a href="#elk-on-docker-%EC%84%A4%EC%B9%98">ELK on Docker 설치</a></li></ul>
+</li>
+<li><a href="#references">REFERENCES</a></li>
+</ul>
+
+      </div>
+      <p>이전 글: <a href="https://weejw.github.io/data/pipeline/2022/03/18/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0.html">ELK + beats 시작하기</a></p>
+
+<h2 id="어떻게-구성할-것인가">어떻게 구성할 것인가?</h2>
+
+<p><a href="https://www.elastic.co/guide/en/beats/libbeat/6.1/getting-started.html">가이드</a> 글에 나타난 것처럼 beath와 elk의 동작은(가장 기본적인) filebeat의 내용을 elk로 보내면 된다.<br><br>
+<img src="https://user-images.githubusercontent.com/33684393/159425922-6b05e02d-83d6-47d8-b530-fe7bc4189674.png" alt="image"></p>
+
+<p><br>난 여기서 filebeat이랑 logstash 서버를 달리하고싶은건데…
+<a href="https://www.elastic.co/kr/blog/small-medium-or-large-scaling-elasticsearch-and-evolving-the-elastic-stack-to-fit">이 포스터</a> 가 정말 다양한 구성을 보여주고 있어서 좋다. 
+아래 그림은 그 중 가장 기본적인 구조이다.<br></p>
+
+<p><img src="https://user-images.githubusercontent.com/33684393/159427548-0b92c098-5885-4692-81b6-864aaa4b96b7.png" alt="image"> <br></p>
+
+<p>처음에 위 그림에서 master / data nodes (3)이 이해가 안갔다.</p>
+<ul>
+  <li>master 1에 data 3개라는 뜻인가…?</li>
+  <li>master, data 모두 3개라는 뜻인가?</li>
+</ul>
+
+<p><a href="https://esbook.kimjmin.net/03-cluster/3.3-master-and-data-nodes">이 곳</a> 에서 해답을 찾을 수있었다.<br>
+Master eligible node라는 개념으로 중요한 역할인 master가 죽어버리면 이를 대신할 node를 지정해놔야한다. 그리고 매번 마스터는 최적의 노드가 맡게된다고한다.<br>
+즉 <u> 모든 노드가 data node이자 master node 후보</u>였던 것이다. 기본값이 마스터이면서 데이터라고 한다. 단, production 환경에서는 분리하는 것이 좋다고…<br>
+Ingest Nodes는 인덱싱 전 전처리를 담당하는 노드인데 아래 그림을 보면 이는 분리해서 두는게 좋다고 나와있다.<br></p>
+
+<p>x-pack은 <a href="https://www.elastic.co/guide/kr/x-pack/current/xpack-introduction.html">이 곳</a> 에 설명되어있다.유료 기능이 때문에,, 필요하지않는 경우 관련 설정을 지워준다.(elastic,kibana,logstash/config/~.yml 파일에 있다)</p>
+<blockquote>
+  <p>X-Pack은 보안, 알림, 모니터링, 보고, 그래프 기능을 설치하기 편리한 단일 패키지로 번들 구성한 Elastic Stack 확장 프로그램입니다.</p>
+</blockquote>
+
+<p><br>각 노드의 필요 스팩이다. 일단 위 사진에는 없는 노드인데 ML은 지금 당장은 필요가없고.. Coordinator는 좀 더 봐야할 듯 하다. 위 문서에서도 나중에 성능 업그레이드를 위해 coordinating node를 추가하니 그 때 추가해보도록 하자 :)<br>
+<img src="https://user-images.githubusercontent.com/33684393/159436319-c5ab7546-2d7e-4920-90af-9b84e7f91ca8.png" alt="image"></p>
+
+<h2 id="elk-cluster-생성">ELK Cluster 생성</h2>
+<p>위에 나와있듯이 구성하려면 cluster 구성이 필요하다. 각 노드를 생성한 뒤 클러스터로 통신이 가능하게끔하자.</p>
+
+<h3 id="elk-on-docker-설치">ELK on Docker 설치</h3>
+<p><a href="https://github.com/deviantony/docker-elk">https://github.com/deviantony/docker-elk</a> 를 clone해서 사용하면 된다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git clone https://github.com/deviantony/docker-elk
+<span class="nv">$ </span><span class="nb">cd </span>docker-elk
+<span class="nv">$ </span>docker-compose up
+</code></pre></div></div>
+
+<p>실행은 문제없이 된다 :)
+<img src="https://user-images.githubusercontent.com/33684393/159443524-4b15714c-01c0-4212-89f2-e62bd185c91d.png" alt="image"></p>
+
+<blockquote>
+  <p>비밀번호 변경이 추가되어야하는데 이 때문에 자꾸 에러가 떠서 잠깐 보류..ㅠㅠ..(일단 내 로컬에서만 테스팅할거니까)</p>
+</blockquote>
+
+<h2 id="references">REFERENCES</h2>
+<p><a href="https://logz.io/blog/elasticsearch-cluster-tutorial/">https://logz.io/blog/elasticsearch-cluster-tutorial/</a> <br>
+<a href="https://www.gnoti.com/index.php/2018/10/22/elk9/">https://www.gnoti.com/index.php/2018/10/22/elk9/</a> <br>
+<a href="https://m.blog.naver.com/olpaemi/222005459201">https://m.blog.naver.com/olpaemi/222005459201</a> <br>
+<a href="https://www.datio.com/architecture/elasticsearch-universe-architectural-perspective/">https://www.datio.com/architecture/elasticsearch-universe-architectural-perspective/</a> <br> 
+<a href="https://www.digitalocean.com/community/questions/how-to-setup-filebeat-and-another-beats-to-get-log-data-from-another-server">https://www.digitalocean.com/community/questions/how-to-setup-filebeat-and-another-beats-to-get-log-data-from-another-server</a> <br>
+<a href="https://www.elastic.co/kr/blog/should-i-use-logstash-or-elasticsearch-ingest-nodes">https://www.elastic.co/kr/blog/should-i-use-logstash-or-elasticsearch-ingest-nodes</a></p>
+
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/machine-learning/2022/03/22/zero-shot.html" title="zero-shot">zero-shot</a><a class="next" href="/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html" title="파이썬 사용 시 메모리 최적화">파이썬 사용 시 메모리 최적화</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/python/2022/04/06/python-TDD-2.html" title="파이썬 사용 시 메모리 최적화">TDD(Test Driven Development) (2)</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data-pipeline/2022/01/19/kube.html" title="파이썬 사용 시 메모리 최적화">kubernetes의 기초</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html" title="파이썬 사용 시 메모리 최적화">파이썬 사용 시 메모리 최적화</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/thesis/2022/04/07/retinaNet.html" title="파이썬 사용 시 메모리 최적화">RetinaNet</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  function getTOCNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var tocNodes = nodes.filter(function(elem) {
+        return elem.tagName == "A";
+    });
+    return tocNodes;
+  }
+  function getHeaderNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var headerNodes = nodes.filter(function(elem) {
+        return elem.tagName == "H1" || elem.tagName == "H2" || elem.tagName == "H3" || elem.tagName == "H4" || elem.tagName == "H5" || elem.tagName == "H6";
+    });
+    return headerNodes;
+  }
+
+  var title = document.getElementsByClassName("post-title")[0];
+  var titleY = window.pageYOffset + title.getBoundingClientRect().top;
+  
+  var article = document.getElementsByClassName("post-article")[0];
+  var articleY = window.pageYOffset + article.getBoundingClientRect().top;
+
+  var toc = document.getElementsByClassName("toc")[0];
+
+  var headerNodes = getHeaderNodes(article);
+  var tocNodes = getTOCNodes(toc);
+
+  var before = undefined;
+
+  document.addEventListener('scroll', function(e) {
+    if (window.scrollY >= articleY-60) {
+      toc.style.cssText = "position: fixed; top: 60px;";
+    }
+    else {
+      toc.style.cssText = "";
+    }
+
+    var current = headerNodes.filter(function(header) {
+      var headerY = window.pageYOffset + header.getBoundingClientRect().top;
+      return window.scrollY >= headerY - 60;
+    });
+
+    if (current.length > 0) {
+      current = current[current.length-1];
+
+      var currentA = tocNodes.filter(function(tocNode) {
+        return tocNode.innerHTML == current.innerHTML;
+      })
+      
+      currentA = currentA[0];
+      if (currentA) {
+        if (before == undefined) before = currentA;
+
+        if (before != currentA) {
+          before.classList.remove("toc-active");
+          before = currentA;
+        }
+
+        currentA.classList.add("toc-active");
+      }
+      else {
+        if (before) 
+          before.classList.remove("toc-active");
+      }
+    }
+    else {
+      if (before) 
+          before.classList.remove("toc-active");
+    }
+
+  }, false);
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Unpublished Work <span class="copyleft">©</span> 2017-2022 weejw</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/jekyll-theme-yat/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

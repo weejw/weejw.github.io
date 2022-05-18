@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>파이썬 사용 시 메모리 최적화 | 위지원의 깃블로그</title>
+<meta name="generator" content="Jekyll v4.2.2">
+<meta property="og:title" content="파이썬 사용 시 메모리 최적화">
+<meta name="author" content="weejw">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="전에 TB급 데이터를 다루면서 메모리 관리가 얼마나 중요한지 알게되었다. 툭하면 파이프라인이 메모리로 터지곤했다…ㅠㅠ">
+<meta property="og:description" content="전에 TB급 데이터를 다루면서 메모리 관리가 얼마나 중요한지 알게되었다. 툭하면 파이프라인이 메모리로 터지곤했다…ㅠㅠ">
+<link rel="canonical" href="/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html">
+<meta property="og:url" content="/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html">
+<meta property="og:site_name" content="위지원의 깃블로그">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-03-24T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="파이썬 사용 시 메모리 최적화">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"weejw"},"dateModified":"2022-03-24T00:00:00+00:00","datePublished":"2022-03-24T00:00:00+00:00","description":"전에 TB급 데이터를 다루면서 메모리 관리가 얼마나 중요한지 알게되었다. 툭하면 파이프라인이 메모리로 터지곤했다…ㅠㅠ","headline":"파이썬 사용 시 메모리 최적화","mainEntityOfPage":{"@type":"WebPage","@id":"/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html"},"url":"/jekyll-theme-yat/data-pipeline/2022/03/24/pipeline-python-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A6%AC.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/jekyll-theme-yat/assets/css/main.css">
+  <script src="/jekyll-theme-yat/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/jekyll-theme-yat/feed.xml" title="위지원의 깃블로그">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #ff4e00;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+  <style> 
+    ::-webkit-scrollbar{width: 10px;}
+    ::-webkit-scrollbar-track {background-color:hsl(0, 0%, 0%); border-radius: 12px;}
+    ::-webkit-scrollbar-thumb {background-color:#ffffff; border-radius: 12px;}
+    ::-webkit-scrollbar-thumb:hover {background: #ff0800;}
+    ::-webkit-scrollbar-button:start:decrement,::-webkit-scrollbar-button:end:increment 
+    {
+        width:12px;height:12px;background:transparent;}
+    } 
+  </style>
+    
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/jekyll-theme-yat/">
+  <img class="site-favicon" title="위지원의 깃블로그" src="" onerror="this.style.display='none'">
+  위지원의 깃블로그
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/jekyll-theme-yat/about.html">CONTACT ME</a><a class="page-link" href="/jekyll-theme-yat/archives.html">ARCHIVES</a><a class="page-link" href="/jekyll-theme-yat/categories.html">CATEGORIES</a><a class="page-link" href="/jekyll-theme-yat/">HOME</a><a class="page-link" href="/jekyll-theme-yat/tags.html">TAGS</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('auto' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">파이썬 사용 시 메모리 최적화</h1>
+  <h2 class="post-subtitle">파이썬 어플리케이션 이용 시 메모리를 어떻게 최적화할 수 있을까?</h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2022-03-24T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Mar 24, 2022
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 6 mins</span>
+  </p>
+<div class="post-tags">
+<a class="post-tag" href="/jekyll-theme-yat/tags.html#Python">#Python</a><a class="post-tag" href="/jekyll-theme-yat/tags.html#Memory">#Memory</a>
+</div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+      <div class="toc">
+        <a href="#">&lt;맨 위로&gt;</a>
+        <ul>
+<li><a href="#%EC%99%9C-%EB%A9%94%EB%AA%A8%EB%A6%AC%EB%A5%BC-%EC%A0%88%EC%95%BD%ED%95%B4%EC%95%BC%ED%95%A0%EA%B9%8C">왜 메모리를 절약해야할까?</a></li>
+<li>
+<a href="#%EB%B3%91%EB%AA%A9%EC%9D%84-%EC%B0%BE%EC%95%84%EC%95%BC%ED%95%9C%EB%8B%A4">병목을 찾아야한다.</a><ul>
+<li><a href="#memory_profiler">memory_profiler</a></li>
+<li><a href="#sysgetsizeof">sys.getsizeof()</a></li>
+<li><a href="#pympler">pympler</a></li>
+</ul>
+</li>
+<li>
+<a href="#ram-%EC%A0%88%EC%95%BD%ED%95%98%EA%B8%B0">RAM 절약하기!</a><ul>
+<li><a href="#array-%EB%98%90%EB%8A%94-numpy-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0">array 또는 numpy 사용하기</a></li>
+<li><a href="#__slot__"><code class="language-plaintext highlighter-rouge">__slot__</code></a></li>
+</ul>
+</li>
+<li>
+<a href="#not-using-ran-at-all">Not Using RAN At All</a><ul><li><a href="#mmap-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0">mmap 사용하기</a></li></ul>
+</li>
+<li><a href="#references">REFERENCES</a></li>
+</ul>
+
+      </div>
+      <p>전에 TB급 데이터를 다루면서 메모리 관리가 얼마나 중요한지 알게되었다. 툭하면 파이프라인이 메모리로 터지곤했다…ㅠㅠ<br></p>
+
+<p>그러다가 좋은 글을 하나 발견했다. 바로 <a href="https://martinheinz.dev/blog/68">Optimizing Memory Usage in Python Applications</a> 이 글이다. 첫 문장에 바로 나같은 사람을 지칭하고있었다. <br></p>
+<blockquote>
+  <p>arely is anyone concerned with memory consumption, well, until they run out of RAM.</p>
+</blockquote>
+
+<h2 id="왜-메모리를-절약해야할까">왜 메모리를 절약해야할까?</h2>
+<p>굉장히 직관적인 이유를 말하고 있었다. 돈. 돈은 매우 중요하다 인력을 쓰든, cloud를 쓰든 뭐든 돈이니…<br></p>
+<blockquote>
+  <p>One simple reason is money.</p>
+</blockquote>
+
+<p>두 번째로는 다음과 같다. data가 mass를 가지고있다는게 무슨 말일까?<br></p>
+<blockquote>
+  <p>Another reason is the notion that “data has mass”</p>
+</blockquote>
+
+<p>바로 다음에 설명을 한다. 대량의 데이터에 대한 설명을 하는 것이었다. 내가 위에서 겪었던 TB급 데이터같은.. 
+이러한 경우는 캐싱을 하거나 RAM에 저장할 수 없다. 나 또한 18TB 하드를 6개 돌려가며 쓰고 그랬답.. 또륵..
+이러한 경우 전체적으로 성능이 느려진다.</p>
+<blockquote>
+  <p>if there’s a lot of it, then it will move around slowly.</p>
+</blockquote>
+
+<p>마지막은 다음과 같다. 여기서 ‘do’는 ‘adding more memory’ 다.</p>
+<blockquote>
+  <p>you can’t do that if you don’t have any memory left on the machine.</p>
+</blockquote>
+
+<h2 id="병목을-찾아야한다">병목을 찾아야한다.</h2>
+
+<h3 id="memory_profiler">memory_profiler</h3>
+<p>memory_profiler라는 python tool이 있다. 이 툴은 라인별로 메모리 사용량 체크가 가능하다. 간단하게 코드를 하나 작성하고 위에 @profile 을 적어줘야한다.<br></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">profile</span>
+<span class="k">def</span> <span class="nf">memory_intensive</span><span class="p">():</span>
+    <span class="n">lis</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+        <span class="n">lis</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">lis</span><span class="p">))</span> 
+    <span class="k">del</span> <span class="n">lis</span>
+
+
+    <span class="n">lis2</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100000</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+        <span class="n">lis2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">lis2</span><span class="p">))</span>
+    <span class="k">del</span> <span class="n">lis2</span>
+
+    <span class="k">return</span> <span class="bp">True</span>
+
+<span class="n">memory_intensive</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>그러면 다음과 같이 나온다. 보면 append 할 때 메모리 사용량이 많아진다. 대신 크기를 미리 지정하고 나서 진행하는건 상대적으로 적다 :) <br>
+이는 growth pattern! 리스트가 어느정도 이상 차면 resize를 하기때문이다. <a href="https://www.youtube.com/watch?v=XXGd_t6YF50&list=PLZPhyNeJvHRlECdmkJ7M8konKB0NhBfve&index=4">시간복잡도로 살펴보는 파이썬 내장 자료형의 효율적인 활용</a> 에서 자세하게 이 이유를 알 수있다.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Filename: test.py
+
+Line <span class="c">#    Mem usage    Increment  Occurences   Line Contents</span>
+<span class="o">============================================================</span>
+     1   40.523 MiB   40.523 MiB           1   @profile
+     2                                         def memory_intensive<span class="o">()</span>:
+     3   40.523 MiB    0.000 MiB           1       lis <span class="o">=</span> <span class="o">[]</span>
+     4
+     5
+     6   42.125 MiB    0.000 MiB      100001       <span class="k">for </span>i <span class="k">in </span>range<span class="o">(</span>100000<span class="o">)</span>:
+     7   42.125 MiB    1.602 MiB      100000           lis.append<span class="o">(</span>100<span class="o">)</span>
+     8   42.129 MiB    0.004 MiB           1       print<span class="o">(</span><span class="nb">sum</span><span class="o">(</span>lis<span class="o">))</span>
+     9   40.660 MiB   <span class="nt">-1</span>.469 MiB           1       del lis
+    10
+    11
+    12   41.426 MiB    0.766 MiB           1       lis2 <span class="o">=</span> <span class="o">[</span>None] <span class="k">*</span> 100000
+    13
+    14   41.426 MiB    0.000 MiB      100001       <span class="k">for </span>i <span class="k">in </span>range<span class="o">(</span>100000<span class="o">)</span>:
+    15   41.426 MiB    0.000 MiB      100000           lis2[i] <span class="o">=</span> 100
+    16
+    17   41.426 MiB    0.000 MiB           1       print<span class="o">(</span><span class="nb">sum</span><span class="o">(</span>lis2<span class="o">))</span>
+    18   41.426 MiB    0.000 MiB           1       del lis2
+    19
+    20   41.426 MiB    0.000 MiB           1       <span class="k">return </span>True
+</code></pre></div></div>
+
+<h3 id="sysgetsizeof">sys.getsizeof()</h3>
+
+<p>아래 사진에 나와있듯이 우리가 배운것 처럼 숫자는 4바이트씩 문자열은 1바이트씩 늘어난다. 그러나 리스트내에선 이는 지켜지지 않는다. 조큼은 당연한 내용….?<br>
+<img src="https://user-images.githubusercontent.com/33684393/160036604-7f4ab1fb-2fc5-4951-bf1b-17f337e0e2ff.png" alt="image"></p>
+
+<h3 id="pympler">pympler</h3>
+
+<p>pympler는 python object에 대한 사이즈에 대해 좀 더 많은걸 얻을 수 있다고 한다. 
+ 와우!! 리스트 내의 메모리를 알고자 할때 완전 유용할 것 같다.
+<img src="https://user-images.githubusercontent.com/33684393/160036941-35ab186c-bfed-4631-851c-aa4698828abd.png" alt="image"></p>
+
+<h2 id="ram-절약하기">RAM 절약하기!</h2>
+
+<p>첫 번째는 이미 내가 위에서 말한거였다.. 리스트 크기 할당 한뒤에 사용하기 ㅎㅎ;; 근데 이는 워낙 유명해서..<br></p>
+
+<h3 id="array-또는-numpy-사용하기">array 또는 numpy 사용하기</h3>
+<p>두 번째는 맙소사! array라는 모듈을 사용하기이다. 아래 사진을 보자.<br>
+메모리 사용량이 거진 4배나 줄었다! 다음부턴 이 array를 쓰도록해야겠어!! 단, 저장에 지원되는 타입(integer, string.. 등)이 정해져있다고하니 이를 주의해야겠다.<br>
+추가적으로 수학적 연산이 많을때는 numpy 배열을 쓰는 것이 효율적이라고 한다! <br>
+<img src="https://user-images.githubusercontent.com/33684393/160037864-b7feb2a2-be68-4216-bb58-bdbaf9afe2f2.png" alt="image"></p>
+
+<h3 id="__slot__"><code class="language-plaintext highlighter-rouge">__slot__</code></h3>
+<p>기본적으로 파이썬 object는 instance 속성의 저장을 위해 dict을 사용한다고 한다. 이 dict은 메모리 사용량이 적지않다.<br>
+윗 글만 봤을 땐 잘 이해가 안가서 <a href="https://ddanggle.gitbooks.io/interpy-kr/content/ch10-slots-magic.html">이 글</a> 을 참고했다. 이 글에 있는 예문이 더 직관적이다.<br>
+이 방법으로 메모리를 4-50%나 줄이기도 한다고 한다;; 덜덜.. 또는 pypy를 사용하면된다고 한다. 이러한 최적화를 자동으로해준다고 한다. 아~ 이래서 백준에서 pypy를 쓰면 메모리 에러를 잡을 수 있던 것이었구나!<br></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">class</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="p">.</span><span class="k">class</span> <span class="err">= </span><span class="nc">class</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">set_up</span><span class="p">()</span>
+    <span class="c1"># ...
+</span></code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'class'</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">class</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="p">.</span><span class="k">class</span> <span class="err">= </span><span class="nc">class</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">set_up</span><span class="p">()</span>
+    <span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>메모리 사용률을 다음과같이 체크해볼 수 있다. 와 진짜 엄첨 줄어든다.. slot 있는게!!! 어메이징!!! 재미따 ㅎㅎ <br>
+<img src="https://user-images.githubusercontent.com/33684393/160039521-2c62a04a-eff8-46ce-bb1a-39f9dccb03da.png" alt="image"></p>
+
+<p>마지막으론 문자열 trie structure 이용이다. <a href="https://marisa-trie.readthedocs.io/en/latest/tutorial.html">https://marisa-trie.readthedocs.io/en/latest/tutorial.html</a> 에서 사용방법이 나와있다. 역시 파이썬은 없는게 없다..<br></p>
+
+<h2 id="not-using-ran-at-all">Not Using RAN At All</h2>
+
+<p>데이터를 한 번에 다 불러오지않고 점진적으로 로드해 사용할 수 있다.<br></p>
+<h3 id="mmap-사용하기">mmap 사용하기</h3>
+
+<p>사용법은 아래와 같다.</p>
+<ul>
+  <li>file.fileno()를 이용해 메모리에 파일을 맵핑한다. 이제 이 데이터를 접근할 수있다. 삭제도 가능하다 물론! :)
+<img src="https://user-images.githubusercontent.com/33684393/160040806-a0c41548-e05a-4dae-a690-84eda5f1e71f.png" alt="image">
+</li>
+</ul>
+
+<p>삭제는 위 글에서 나와있듯이 아래처럼 진행할 수 있다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">mmap</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"some-data.txt"</span><span class="p">,</span> <span class="s">"r+"</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">mmap</span><span class="p">.</span><span class="n">mmap</span><span class="p">(</span><span class="nb">file</span><span class="p">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">m</span><span class="p">:</span>
+        <span class="c1"># Words starting with capital letter
+</span>        <span class="c1"># blar~blar~(전체 코드는 위 글로 고고~:))
+</span>
+        <span class="c1"># Delete first 10 characters
+</span>        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">new_size</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="n">length</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">move</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">size</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span>
+        <span class="n">m</span><span class="p">.</span><span class="n">flush</span><span class="p">()</span>
+      
+    <span class="nb">file</span><span class="p">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">new_size</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="references">REFERENCES</h2>
+<p><a href="https://data-newbie.tistory.com/701">https://data-newbie.tistory.com/701</a> <br>
+<a href="https://ddanggle.gitbooks.io/interpy-kr/content/ch10-slots-magic.html">https://ddanggle.gitbooks.io/interpy-kr/content/ch10-slots-magic.html</a></p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/jekyll-theme-yat/data-pipeline/2022/03/23/pipeline-%ED%98%BC%EC%9E%90-%EA%B5%AC%EC%B6%95%ED%95%B4%EB%B3%B4%EA%B8%B0-2.html" title="ELK + beats 시작하기 2">ELK + beats 시작하기 2</a><a class="next" href="/jekyll-theme-yat/data-pipeline/2022/03/25/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%94%94%EC%8A%A4%EC%BB%A4%EB%B2%84%EB%A6%AC.html" title="데이터 디스커버리? 데이터 거버넌스?">데이터 디스커버리? 데이터 거버넌스?</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/jekyll-theme-yat/thesis/2022/04/07/retinaNet.html" title="데이터 디스커버리? 데이터 거버넌스?">RetinaNet</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/python/2022/04/08/python-TDD-3.html" title="데이터 디스커버리? 데이터 거버넌스?">TDD(Test Driven Development) (3)</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/machine-learning/2022/03/16/YOLO-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EA%B8%B0.html" title="데이터 디스커버리? 데이터 거버넌스?">YOLO(You Only Look Once) v5 사용해보기</a></li>
+<li><a class="post-link" href="/jekyll-theme-yat/data-processing/2022/03/14/Obejct-Detection.html" title="데이터 디스커버리? 데이터 거버넌스?">Object Detection Stage</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+<script>
+  function getTOCNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var tocNodes = nodes.filter(function(elem) {
+        return elem.tagName == "A";
+    });
+    return tocNodes;
+  }
+  function getHeaderNodes(master) {
+    var nodes = Array.prototype.slice.call(master.getElementsByTagName("*"), 0);
+    var headerNodes = nodes.filter(function(elem) {
+        return elem.tagName == "H1" || elem.tagName == "H2" || elem.tagName == "H3" || elem.tagName == "H4" || elem.tagName == "H5" || elem.tagName == "H6";
+    });
+    return headerNodes;
+  }
+
+  var title = document.getElementsByClassName("post-title")[0];
+  var titleY = window.pageYOffset + title.getBoundingClientRect().top;
+  
+  var article = document.getElementsByClassName("post-article")[0];
+  var articleY = window.pageYOffset + article.getBoundingClientRect().top;
+
+  var toc = document.getElementsByClassName("toc")[0];
+
+  var headerNodes = getHeaderNodes(article);
+  var tocNodes = getTOCNodes(toc);
+
+  var before = undefined;
+
+  document.addEventListener('scroll', function(e) {
+    if (window.scrollY >= articleY-60) {
+      toc.style.cssText = "position: fixed; top: 60px;";
+    }
+    else {
+      toc.style.cssText = "";
+    }
+
+    var current = headerNodes.filter(function(header) {
+      var headerY = window.pageYOffset + header.getBoundingClientRect().top;
+      return window.scrollY >= headerY - 60;
+    });
+
+    if (current.length > 0) {
+      current = current[current.length-1];
+
+      var currentA = tocNodes.filter(function(tocNode) {
+        return tocNode.innerHTML == current.innerHTML;
+      })
+      
+      currentA = currentA[0];
+      if (currentA) {
+        if (before == undefined) before = currentA;
+
+        if (before != currentA) {
+          before.classList.remove("toc-active");
+          before = currentA;
+        }
+
+        currentA.classList.add("toc-active");
+      }
+      else {
+        if (before) 
+          before.classList.remove("toc-active");
+      }
+    }
+    else {
+      if (before) 
+          before.classList.remove("toc-active");
+    }
+
+  }, false);
+</script>
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jekyll-theme-yat/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Unpublished Work <span class="copyleft">©</span> 2017-2022 weejw</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="http://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/jekyll-theme-yat/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
